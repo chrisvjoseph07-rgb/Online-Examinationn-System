@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard | ExamPro</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container">
+      <a href="student-dashboard.html" class="brand-logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Exam<span style="color:var(--primary);">Pro</span></span>
+      </a>
+
+      <nav>
+        <ul class="nav-links" id="primaryNav">
+          <li><a href="student-dashboard.html" class="nav-link active">Dashboard</a></li>
+          <li><a href="#availableExamsSection" class="nav-link">Available Exams</a></li>
+          <li><a href="#recentResultsSection" class="nav-link">My Results</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <div id="userNavBadge"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Welcome Dashboard Header -->
+  <div class="dashboard-header">
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h1 id="welcomeUserGreeting">Welcome Back!</h1>
+          <p>Select an exam below to begin testing your skills and view your progress.</p>
+        </div>
+        <div>
+          <span class="badge badge-info" style="font-size:0.85rem; padding:0.5rem 1rem;">
+            <i class="fa-solid fa-user-graduate"></i> Student Portal Active
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <div class="container">
+      
+      <!-- Metrics Summary Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon primary"><i class="fa-solid fa-file-signature"></i></div>
+          <div>
+            <div class="stat-value" id="dashTotalAttempted">0</div>
+            <div class="stat-label">Exams Completed</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon success"><i class="fa-solid fa-square-check"></i></div>
+          <div>
+            <div class="stat-value" id="dashPassedExams">0</div>
+            <div class="stat-label">Passed Exams</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon warning"><i class="fa-solid fa-chart-line"></i></div>
+          <div>
+            <div class="stat-value" id="dashAvgScore">0%</div>
+            <div class="stat-label">Average Score</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon info"><i class="fa-solid fa-list-ol"></i></div>
+          <div>
+            <div class="stat-value" id="dashAvailableCount">0</div>
+            <div class="stat-label">Available Exams</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search & Filter Bar -->
+      <div class="card" style="margin-bottom:2rem; padding:1.25rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+          <div style="flex:1; min-width:260px;">
+            <input type="text" id="examSearchInput" class="form-control" placeholder="Search exams by name or subject...">
+          </div>
+          <div style="width:200px;">
+            <select id="examSubjectSelect" class="form-control">
+              <option value="all">All Subjects</option>
+              <option value="Web Development">Web Development</option>
+              <option value="Python Programming">Python Programming</option>
+              <option value="Data Structures">Data Structures</option>
+              <option value="Computer Networks">Computer Networks</option>
+              <option value="General Aptitude">General Aptitude</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Available Exams Section -->
+      <section id="availableExamsSection" style="margin-bottom:3rem;">
+        <h2 style="margin-bottom:1.5rem;"><i class="fa-solid fa-folder-open" style="color:var(--primary);"></i> Available Exams</h2>
+        
+        <div class="exam-grid" id="studentExamGrid">
+          <!-- Dynamically Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- Recent Results Section -->
+      <section id="recentResultsSection" style="margin-bottom:3rem;">
+        <h2 style="margin-bottom:1.5rem;"><i class="fa-solid fa-clock-rotate-left" style="color:var(--primary);"></i> Recent Results & Performance History</h2>
+        
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Exam Name</th>
+                <th>Score</th>
+                <th>Percentage</th>
+                <th>Status</th>
+                <th>Date Taken</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="studentResultsTableBody">
+              <!-- Dynamically Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container" style="text-align:center;">
+      <p>&copy; 2026 ExamPro Online Examination System.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = requireAuth(['student', 'applicant']);
+      if (!user) return;
+
+      document.getElementById('welcomeUserGreeting').innerText = `Welcome back, ${user.name}!`;
+
+      renderStudentDashboard();
+    });
+
+    function renderStudentDashboard() {
+      const user = getCurrentUser();
+      const exams = ExamProDB.get(STORAGE_KEYS.EXAMS).filter(e => e.active);
+      const results = ExamProDB.get(STORAGE_KEYS.RESULTS).filter(r => r.studentId === user.id);
+
+      // Metrics calculation
+      const totalAttempted = results.length;
+      const passedCount = results.filter(r => r.passed).length;
+      const avgScore = totalAttempted > 0
+        ? Math.round(results.reduce((acc, r) => acc + r.percentage, 0) / totalAttempted)
+        : 0;
+
+      document.getElementById('dashTotalAttempted').innerText = totalAttempted;
+      document.getElementById('dashPassedExams').innerText = passedCount;
+      document.getElementById('dashAvgScore').innerText = `${avgScore}%`;
+      document.getElementById('dashAvailableCount').innerText = exams.length;
+
+      // Filter logic for available exams
+      const searchInput = document.getElementById('examSearchInput');
+      const subjectSelect = document.getElementById('examSubjectSelect');
+      const grid = document.getElementById('studentExamGrid');
+
+      const filterExams = () => {
+        const term = searchInput.value.toLowerCase();
+        const subj = subjectSelect.value;
+
+        const filtered = exams.filter(e => {
+          const matchSearch = e.title.toLowerCase().includes(term) || e.subject.toLowerCase().includes(term);
+          const matchSubj = (subj === 'all') || (e.subject === subj);
+          return matchSearch && matchSubj;
+        });
+
+        grid.innerHTML = '';
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem; background:white; border-radius:var(--radius-lg);">No active exams found matching search criteria.</div>`;
+          return;
+        }
+
+        filtered.forEach(ex => {
+          const card = document.createElement('div');
+          card.className = 'exam-card';
+          card.innerHTML = `
+            <div class="exam-card-body">
+              <span class="badge badge-primary">${escapeHtml(ex.subject)}</span>
+              <h3 style="margin: 0.75rem 0 0.5rem 0;">${escapeHtml(ex.title)}</h3>
+              <p style="font-size:0.85rem; height:40px; overflow:hidden;">${escapeHtml(ex.description)}</p>
+              <div class="exam-meta-grid">
+                <div class="exam-meta-item"><i class="fa-regular fa-clock"></i> ${ex.durationMinutes} Mins</div>
+                <div class="exam-meta-item"><i class="fa-solid fa-list-check"></i> ${ex.questionIds.length} Questions</div>
+                <div class="exam-meta-item"><i class="fa-solid fa-star"></i> ${ex.totalMarks} Marks</div>
+                <div class="exam-meta-item"><i class="fa-solid fa-percent"></i> ${ex.passingPercentage}% Pass</div>
+              </div>
+              <a href="instructions.html?id=${ex.id}" class="btn btn-primary btn-full"><i class="fa-solid fa-play"></i> Start Exam</a>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      };
+
+      searchInput.addEventListener('input', filterExams);
+      subjectSelect.addEventListener('change', filterExams);
+      filterExams();
+
+      // Render Results Table
+      const resultsBody = document.getElementById('studentResultsTableBody');
+      resultsBody.innerHTML = '';
+
+      if (results.length === 0) {
+        resultsBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No completed exam results yet. Take an exam above to see your scores!</td></tr>`;
+      } else {
+        [...results].reverse().forEach(r => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td><strong>${escapeHtml(r.examTitle)}</strong></td>
+            <td>${r.score} / ${r.totalPossibleMarks}</td>
+            <td><strong>${r.percentage}%</strong></td>
+            <td>
+              <span class="badge ${r.passed ? 'badge-success' : 'badge-danger'}">
+                ${r.passed ? 'PASSED' : 'FAILED'}
+              </span>
+            </td>
+            <td>${new Date(r.completedAt).toLocaleDateString()}</td>
+            <td>
+              <a href="review.html?resId=${r.id}" class="btn btn-sm btn-secondary"><i class="fa-solid fa-eye"></i> Review Answers</a>
+            </td>
+          `;
+          resultsBody.appendChild(row);
+        });
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+  </script>
+</body>
+</html>

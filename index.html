@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ExamPro - Next-Generation Online Examination Platform for Students & Candidates.">
+  <title>ExamPro | Modern Online Examination System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <!-- Header Navbar -->
+  <header class="navbar">
+    <div class="container">
+      <a href="index.html" class="brand-logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Exam<span style="color:var(--primary);">Pro</span></span>
+      </a>
+
+      <nav>
+        <ul class="nav-links" id="primaryNav">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="#examsSection" class="nav-link">Exams</a></li>
+          <li><a href="#howItWorks" class="nav-link">How It Works</a></li>
+          <li><a href="login.html" class="nav-link">Login</a></li>
+          <li><a href="register.html" class="nav-link">Register</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <div id="userNavBadge"></div>
+        <a href="admin-login.html" class="btn btn-sm btn-outline"><i class="fa-solid fa-lock"></i> Admin</a>
+        <button class="mobile-nav-toggle" id="mobileNavToggle">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div>
+          <div class="badge badge-info" style="margin-bottom:1rem; padding:0.4rem 1rem;">
+            <i class="fa-solid fa-shield-halved"></i> Secure Examination Platform
+          </div>
+          <h1 class="hero-title">Online Examination Made Simple</h1>
+          <p class="hero-subtitle">
+            Take secure online exams, get instant results, and track your performance with our powerful examination engine built for students and job applicants.
+          </p>
+          <div class="hero-actions">
+            <a href="login.html" class="btn btn-primary btn-lg"><i class="fa-solid fa-pen-to-square"></i> Take an Exam</a>
+            <a href="register.html" class="btn btn-secondary btn-lg"><i class="fa-solid fa-user-plus"></i> Get Started</a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-card-preview">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+              <h4 style="color:white;"><i class="fa-solid fa-clock"></i> Web Dev Fundamentals</h4>
+              <span class="badge badge-success">LIVE TEST</span>
+            </div>
+            <div style="font-size:0.9rem; color:#cbd5e1; margin-bottom:1rem;">
+              <p><i class="fa-solid fa-circle-question"></i> 5 Questions | 15 Mins</p>
+              <p><i class="fa-solid fa-award"></i> Instant Evaluation & Breakdown</p>
+            </div>
+            <div style="background:rgba(255,255,255,0.15); padding:1rem; border-radius:var(--radius-md); text-align:center;">
+              <span style="font-size:1.5rem; font-weight:700;">Time Left: 14:32</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Grid Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Key Features</h2>
+        <p class="section-subtitle">Designed to provide a smooth, dependable, and secure testing environment for every applicant.</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-laptop-code"></i></div>
+          <h3>Online Exams</h3>
+          <p>Access structured tests across various domains anytime, anywhere on any mobile, tablet, or desktop device.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-stopwatch"></i></div>
+          <h3>Timer-Based Tests</h3>
+          <p>Automatic countdown clock with visual notifications and automated exam submission when time expires.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+          <h3>Instant Results</h3>
+          <p>Get immediate score calculations, percentage evaluation, and pass/fail badges as soon as you submit.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-chart-pie"></i></div>
+          <h3>Performance Reports</h3>
+          <p>Detailed question-by-question breakdown with correct keys and explanations for continuous learning.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-lock"></i></div>
+          <h3>Secure Examination</h3>
+          <p>Tab-switch monitoring, fullscreen detectors, right-click protection, and state auto-recovery on refresh.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fa-solid fa-shuffle"></i></div>
+          <h3>Question Randomization</h3>
+          <p>Automated question sequence and option shuffling for enhanced fairness and test integrity.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Exams Preview -->
+  <section class="section" id="examsSection" style="background:var(--bg-subtle);">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Featured Exams</h2>
+        <p class="section-subtitle">Choose from our popular skill assessment tests and evaluate your knowledge.</p>
+      </div>
+
+      <div class="exam-grid">
+        <div class="exam-card">
+          <div class="exam-card-body">
+            <span class="badge badge-primary">Web Development</span>
+            <h3 style="margin: 0.75rem 0 0.5rem 0;">Web Development Fundamentals</h3>
+            <p style="font-size:0.85rem;">Master HTML5, CSS3, and core JavaScript principles.</p>
+            <div class="exam-meta-grid">
+              <div class="exam-meta-item"><i class="fa-regular fa-clock"></i> 15 Mins</div>
+              <div class="exam-meta-item"><i class="fa-solid fa-list-check"></i> 5 Questions</div>
+              <div class="exam-meta-item"><i class="fa-solid fa-star"></i> 20 Marks</div>
+              <div class="exam-meta-item"><i class="fa-solid fa-percent"></i> 60% Pass</div>
+            </div>
+            <a href="login.html" class="btn btn-primary btn-full"><i class="fa-solid fa-play"></i> Start Exam</a>
+          </div>
+        </div>
+
+        <div class="exam-card">
+          <div class="exam-card-body">
+            <span class="badge badge-info">Python</span>
+            <h3 style="margin: 0.75rem 0 0.5rem 0;">Python Programming Basics</h3>
+            <p style="font-size:0.85rem;">Assess data types, loops, syntax, and logic routines.</p>
+            <div class="exam-meta-grid">
+              <div class="exam-meta-item"><i class="fa-regular fa-clock"></i> 20 Mins</div>
+              <div class="exam-meta-item"><i class="fa-solid fa-list-check"></i> 5 Questions</div>
+              <div class="exam-meta-item"><i class="fa-solid fa-star"></i> 25 Marks</div>
+              <div class="exam-meta-item"><i class="fa-solid fa-percent"></i> 70% Pass</div>
+            </div>
+            <a href="login.html" class="btn btn-primary btn-full"><i class="fa-solid fa-play"></i> Start Exam</a>
+          </div>
+        </div>
+
+        <div class="exam-card">
+          <div class="exam-card-body">
+            <span class="badge badge-warning">Algorithms</span>
+            <h3 style="margin: 0.75rem 0 0.5rem 0;">Data Structures & Algorithms</h3>
+            <p style="font-size:0.85rem;">Test problem solving, stacks, queues, trees, and time complexity.</p>
+            <div class="exam-meta-grid">
+              <div class="exam-meta-item"><i class="fa-regular fa-clock"></i> 30 Mins</div>
+              <div class="exam-meta-item"><i class="fa-solid fa-list-check"></i> 5 Questions</div>
+              <div class="exam-meta-item"><i class="fa-solid fa-star"></i> 25 Marks</div>
+              <div class="exam-meta-item"><i class="fa-solid fa-percent"></i> 60% Pass</div>
+            </div>
+            <a href="login.html" class="btn btn-primary btn-full"><i class="fa-solid fa-play"></i> Start Exam</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="section" id="howItWorks">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">Get started in three simple steps.</p>
+      </div>
+
+      <div class="feature-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div style="text-align:center; padding:1.5rem;">
+          <div style="width:64px; height:64px; border-radius:50%; background:var(--primary-light); color:var(--primary); font-size:1.75rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem auto;">1</div>
+          <h3>Register Account</h3>
+          <p>Create your candidate profile as a student or job applicant in seconds.</p>
+        </div>
+
+        <div style="text-align:center; padding:1.5rem;">
+          <div style="width:64px; height:64px; border-radius:50%; background:var(--primary-light); color:var(--primary); font-size:1.75rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem auto;">2</div>
+          <h3>Take Exam</h3>
+          <p>Select your topic, review rules, and answer questions within the countdown timer.</p>
+        </div>
+
+        <div style="text-align:center; padding:1.5rem;">
+          <div style="width:64px; height:64px; border-radius:50%; background:var(--primary-light); color:var(--primary); font-size:1.75rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem auto;">3</div>
+          <h3>Get Score & Feedback</h3>
+          <p>Receive your instant performance analytics, score report, and answer keys.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="brand-logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>ExamPro</span>
+          </a>
+          <p>Next-generation online examination and skill evaluation system.</p>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#examsSection">Exams</a></li>
+            <li><a href="#howItWorks">How It Works</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Portals</h4>
+          <ul class="footer-links">
+            <li><a href="login.html">Student Login</a></li>
+            <li><a href="register.html">Student Register</a></li>
+            <li><a href="admin-login.html">Admin Portal</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Demo Security Note</h4>
+          <p style="font-size:0.8rem; color:#94a3b8;">
+            Client-side browser monitoring included. Production environments require backend verification and camera proctoring.
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 ExamPro Online Examination System. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    document.getElementById('mobileNavToggle')?.addEventListener('click', () => {
+      document.getElementById('primaryNav')?.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>

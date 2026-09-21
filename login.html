@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login | ExamPro</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+    <div class="auth-header">
+      <a href="index.html" class="brand-logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Exam<span style="color:var(--primary);">Pro</span></span>
+      </a>
+      <h2 class="auth-title">Welcome Back</h2>
+      <p class="auth-subtitle">Log in to your account to take exams & view results</p>
+    </div>
+
+    <!-- Demo Credentials Hint -->
+    <div class="security-note" style="margin-bottom: 1.5rem;">
+      <i class="fa-solid fa-circle-info"></i>
+      <div>
+        <strong>Demo Login Credentials:</strong><br>
+        Email: <code>john@example.com</code> | Password: <code>student123</code>
+      </div>
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address</label>
+        <div style="position:relative;">
+          <input type="email" id="email" class="form-control" placeholder="name@example.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+          <label for="password" class="form-label" style="margin:0;">Password</label>
+          <a href="#" onclick="showToast('Password reset link sent to demo email.', 'info'); return false;" style="font-size:0.8rem;">Forgot Password?</a>
+        </div>
+        <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+      </div>
+
+      <div class="form-group" style="display:flex; align-items:center; gap:0.5rem;">
+        <input type="checkbox" id="rememberMe" style="accent-color:var(--primary);">
+        <label for="rememberMe" style="font-size:0.85rem; color:var(--text-secondary); cursor:pointer;">Remember me on this device</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:0.5rem;">
+        <i class="fa-solid fa-right-to-bracket"></i> Login to Dashboard
+      </button>
+    </form>
+
+    <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color:var(--text-secondary);">
+      Don't have an account? <a href="register.html" style="font-weight:600;">Register Now</a>
+    </div>
+
+    <div style="text-align:center; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border-light); font-size:0.85rem;">
+      Are you an Administrator? <a href="admin-login.html" style="font-weight:600; color:var(--primary-dark);">Admin Login Portal</a>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

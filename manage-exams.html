@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Exams | ExamPro</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <a href="admin-dashboard.html" class="brand-logo">
+        <i class="fa-solid fa-user-shield"></i>
+        <span>ExamPro Admin</span>
+      </a>
+
+      <ul class="admin-menu">
+        <li class="admin-menu-item"><a href="admin-dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+        <li class="admin-menu-item"><a href="question-bank.html"><i class="fa-solid fa-database"></i> Question Bank</a></li>
+        <li class="admin-menu-item"><a href="create-exam.html"><i class="fa-solid fa-plus-circle"></i> Create Exam</a></li>
+        <li class="admin-menu-item active"><a href="manage-exams.html"><i class="fa-solid fa-list-check"></i> Manage Exams</a></li>
+        <li class="admin-menu-item"><a href="students.html"><i class="fa-solid fa-users"></i> Students</a></li>
+        <li class="admin-menu-item"><a href="results.html"><i class="fa-solid fa-square-poll-vertical"></i> Results</a></li>
+        <li class="admin-menu-item" style="margin-top:auto;">
+          <a href="#" onclick="logoutUser(); return false;" style="color:#ef4444;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <button class="btn btn-sm btn-secondary" onclick="document.getElementById('adminSidebar').classList.toggle('active')"><i class="fa-solid fa-bars"></i></button>
+          <h2>Manage Active & Archive Exams</h2>
+        </div>
+        <a href="create-exam.html" class="btn btn-primary"><i class="fa-solid fa-plus"></i> New Exam</a>
+      </header>
+
+      <div class="admin-body" id="manageExamsContainer">
+        
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:40px;">#</th>
+                <th>Exam Title</th>
+                <th>Subject</th>
+                <th>Structure</th>
+                <th>Passing Criteria</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="examsTableBody">
+              <!-- Rendered by admin.js -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

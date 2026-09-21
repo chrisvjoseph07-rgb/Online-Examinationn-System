@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exam Result | ExamPro</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <header class="navbar no-print">
+    <div class="container">
+      <a href="student-dashboard.html" class="brand-logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Exam<span style="color:var(--primary);">Pro</span></span>
+      </a>
+      <div class="nav-actions">
+        <div id="userNavBadge"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content" id="resultContainer" style="padding: 2rem 0;">
+    <div class="container">
+      
+      <div class="result-card">
+        
+        <div style="margin-bottom:1.5rem;">
+          <h2 id="resExamTitle">Web Development Fundamentals</h2>
+          <p style="font-size:0.95rem; color:var(--text-secondary);">Candidate: <strong id="resStudentName">John Doe</strong></p>
+        </div>
+
+        <!-- Result Badge Circle -->
+        <div class="result-badge-circle pass" id="resBadgeCircle">
+          <div class="result-percent" id="resPercentage">0%</div>
+          <div class="result-status-label" id="resStatusText">PASSED</div>
+        </div>
+
+        <h3>Overall Score: <span id="resScore" style="color:var(--primary);">0 / 0</span></h3>
+
+        <!-- Detailed Breakdown -->
+        <div class="result-stats-breakdown">
+          <div class="result-stat-box">
+            <div style="font-size:0.8rem; color:var(--text-secondary);">TOTAL QUESTIONS</div>
+            <h4 id="resTotalQuestions">0</h4>
+          </div>
+
+          <div class="result-stat-box">
+            <div style="font-size:0.8rem; color:var(--text-secondary);">ATTEMPTED</div>
+            <h4 id="resAttempted" style="color:var(--info);">0</h4>
+          </div>
+
+          <div class="result-stat-box">
+            <div style="font-size:0.8rem; color:var(--text-secondary);">CORRECT</div>
+            <h4 id="resCorrect" style="color:var(--success);">0</h4>
+          </div>
+
+          <div class="result-stat-box">
+            <div style="font-size:0.8rem; color:var(--text-secondary);">WRONG</div>
+            <h4 id="resWrong" style="color:var(--danger);">0</h4>
+          </div>
+
+          <div class="result-stat-box">
+            <div style="font-size:0.8rem; color:var(--text-secondary);">UNANSWERED</div>
+            <h4 id="resUnanswered" style="color:var(--warning-dark);">0</h4>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; margin-top:2rem;" class="no-print">
+          <button id="reviewAnswersBtn" class="btn btn-primary"><i class="fa-solid fa-list-check"></i> Review Answers</button>
+          <a href="student-dashboard.html" class="btn btn-secondary"><i class="fa-solid fa-house"></i> Back to Dashboard</a>
+          <button id="printResultBtn" class="btn btn-outline"><i class="fa-solid fa-print"></i> Print Result</button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/exam.js"></script>
+</body>
+</html>

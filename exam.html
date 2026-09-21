@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Examination | ExamPro</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="exam-layout">
+
+  <!-- Sticky Topbar Header -->
+  <header class="exam-header">
+    <div style="display:flex; align-items:center; gap:1rem;">
+      <a href="student-dashboard.html" class="brand-logo" style="color:white; font-size:1.25rem;">
+        <i class="fa-solid fa-graduation-cap"></i> ExamPro
+      </a>
+      <span style="color:#94a3b8;">|</span>
+      <h4 id="examTitleDisplay" style="color:white; font-size:1rem; margin:0; font-weight:600;">Loading Exam...</h4>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:1.5rem;">
+      <div class="timer-box" id="timerBox">
+        <i class="fa-regular fa-clock"></i>
+        <span id="timerDisplay">00:00</span>
+      </div>
+
+      <button id="submitExamBtn" class="btn btn-danger btn-sm">
+        <i class="fa-solid fa-paper-plane"></i> Submit Exam
+      </button>
+    </div>
+  </header>
+
+  <!-- Progress Bar Top Accent -->
+  <div style="width:100%; height:4px; background:#334155;">
+    <div id="examProgressBar" style="width:0%; height:100%; background:var(--primary); transition:width 0.3s ease;"></div>
+  </div>
+
+  <!-- Main Exam Content Area -->
+  <main class="exam-main" id="examMainContainer">
+    
+    <!-- Question Area -->
+    <div class="question-container">
+      <div>
+        <div class="question-header">
+          <span class="badge badge-primary" id="qNumberBadge">Question 1 of 5</span>
+          <span class="badge badge-secondary" id="qMarksBadge">4 Marks</span>
+        </div>
+
+        <h3 class="question-title" id="qText">Question loading...</h3>
+
+        <div id="qOptionsContainer" class="options-list">
+          <!-- Dynamically populated options -->
+        </div>
+      </div>
+
+      <!-- Action Controls -->
+      <div class="exam-actions">
+        <div style="display:flex; gap:0.5rem;">
+          <button id="markReviewBtn" class="btn btn-outline btn-sm">
+            <i class="fa-regular fa-bookmark"></i> Mark for Review
+          </button>
+          <button id="clearAnswerBtn" class="btn btn-secondary btn-sm">
+            <i class="fa-solid fa-eraser"></i> Clear Answer
+          </button>
+        </div>
+
+        <div style="display:flex; gap:0.5rem;">
+          <button id="prevBtn" class="btn btn-secondary btn-sm">
+            <i class="fa-solid fa-chevron-left"></i> Previous
+          </button>
+          <button id="nextBtn" class="btn btn-primary btn-sm">
+            Next <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Palette Sidebar -->
+    <aside class="palette-sidebar">
+      <h4 style="font-size:1rem; margin-bottom:0.75rem;"><i class="fa-solid fa-grip"></i> Question Palette</h4>
+      
+      <div class="palette-grid" id="paletteGrid">
+        <!-- Dynamically rendered question palette buttons -->
+      </div>
+
+      <div class="palette-legend">
+        <div class="legend-item">
+          <div class="legend-color" style="background:var(--success);"></div>
+          <span>Answered</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background:var(--bg-subtle); border:1px solid #cbd5e1;"></div>
+          <span>Unanswered</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background:var(--warning);"></div>
+          <span>Marked</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background:var(--primary); border-radius:50%;"></div>
+          <span>Current</span>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/exam.js"></script>
+</body>
+</html>

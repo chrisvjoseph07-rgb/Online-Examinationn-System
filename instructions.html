@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exam Instructions | ExamPro</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container">
+      <a href="student-dashboard.html" class="brand-logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Exam<span style="color:var(--primary);">Pro</span></span>
+      </a>
+      <div class="nav-actions">
+        <div id="userNavBadge"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content" id="instructionsContainer" style="padding: 2.5rem 0;">
+    <div class="container" style="max-width:850px;">
+      
+      <div class="card" style="padding: 2.5rem;">
+        <div style="border-bottom:1px solid var(--border-light); padding-bottom:1.5rem; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <span class="badge badge-primary" id="instSubject">Subject</span>
+            <h1 id="instExamTitle" style="margin-top:0.5rem; font-size:2rem;">Exam Title</h1>
+            <p id="instDescription" style="margin-top:0.25rem;">Exam Description...</p>
+          </div>
+          <a href="student-dashboard.html" class="btn btn-secondary btn-sm"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+
+        <!-- Exam Metrics Highlights Grid -->
+        <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 2rem;">
+          <div style="background:var(--bg-subtle); padding:1rem; border-radius:var(--radius-md); text-align:center;">
+            <div style="font-size:0.8rem; color:var(--text-secondary);">DURATION</div>
+            <div id="instDuration" style="font-size:1.25rem; font-weight:800; color:var(--primary);">0 Mins</div>
+          </div>
+          <div style="background:var(--bg-subtle); padding:1rem; border-radius:var(--radius-md); text-align:center;">
+            <div style="font-size:0.8rem; color:var(--text-secondary);">QUESTIONS</div>
+            <div id="instQuestionCount" style="font-size:1.25rem; font-weight:800; color:var(--primary);">0</div>
+          </div>
+          <div style="background:var(--bg-subtle); padding:1rem; border-radius:var(--radius-md); text-align:center;">
+            <div style="font-size:0.8rem; color:var(--text-secondary);">TOTAL MARKS</div>
+            <div id="instTotalMarks" style="font-size:1.25rem; font-weight:800; color:var(--primary);">0</div>
+          </div>
+          <div style="background:var(--bg-subtle); padding:1rem; border-radius:var(--radius-md); text-align:center;">
+            <div style="font-size:0.8rem; color:var(--text-secondary);">PASSING MARKS</div>
+            <div id="instPassingMarks" style="font-size:1.25rem; font-weight:800; color:var(--success);">0</div>
+          </div>
+        </div>
+
+        <!-- Instructions Rules List -->
+        <div style="margin-bottom:2rem;">
+          <h3 style="margin-bottom:1rem;"><i class="fa-solid fa-clipboard-list" style="color:var(--primary);"></i> Rules & Guidelines</h3>
+          <ul style="display:flex; flex-direction:column; gap:0.75rem; font-size:0.95rem; color:var(--text-secondary); padding-left:1.25rem;">
+            <li><strong>Timer Countdown:</strong> The exam timer starts immediately after clicking "Start Exam". It will automatically submit your attempt when time reaches zero.</li>
+            <li><strong>Question Palette:</strong> You can navigate freely between questions using the Question Palette or Next/Previous controls.</li>
+            <li><strong>Mark for Review:</strong> You can mark questions for review if you wish to revisit them before final submission.</li>
+            <li><strong>Browser & Tab Security:</strong> Switching browser tabs, minimizing the browser, or exiting fullscreen mode will trigger a security log warning.</li>
+            <li><strong>State Auto-Save:</strong> If you accidentally refresh your page, your answered responses and remaining time will be preserved.</li>
+          </ul>
+        </div>
+
+        <!-- Security Disclaimer Note -->
+        <div class="security-note" style="margin-bottom:2rem;">
+          <i class="fa-solid fa-shield-halved"></i>
+          <div>
+            <strong>Anti-Cheating Notice:</strong><br>
+            Browser monitoring is active for demo purposes. Full proctoring requires backend servers and webcam monitoring.
+          </div>
+        </div>
+
+        <div style="text-align:center; padding-top:1rem; border-top:1px solid var(--border-light);">
+          <button id="startExamBtn" class="btn btn-primary btn-lg" style="min-width:240px;">
+            <i class="fa-solid fa-play"></i> Start Exam Now
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/exam.js"></script>
+</body>
+</html>

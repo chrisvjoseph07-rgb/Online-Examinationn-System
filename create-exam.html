@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create New Exam | ExamPro</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <a href="admin-dashboard.html" class="brand-logo">
+        <i class="fa-solid fa-user-shield"></i>
+        <span>ExamPro Admin</span>
+      </a>
+
+      <ul class="admin-menu">
+        <li class="admin-menu-item"><a href="admin-dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+        <li class="admin-menu-item"><a href="question-bank.html"><i class="fa-solid fa-database"></i> Question Bank</a></li>
+        <li class="admin-menu-item active"><a href="create-exam.html"><i class="fa-solid fa-plus-circle"></i> Create Exam</a></li>
+        <li class="admin-menu-item"><a href="manage-exams.html"><i class="fa-solid fa-list-check"></i> Manage Exams</a></li>
+        <li class="admin-menu-item"><a href="students.html"><i class="fa-solid fa-users"></i> Students</a></li>
+        <li class="admin-menu-item"><a href="results.html"><i class="fa-solid fa-square-poll-vertical"></i> Results</a></li>
+        <li class="admin-menu-item" style="margin-top:auto;">
+          <a href="#" onclick="logoutUser(); return false;" style="color:#ef4444;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <button class="btn btn-sm btn-secondary" onclick="document.getElementById('adminSidebar').classList.toggle('active')"><i class="fa-solid fa-bars"></i></button>
+          <h2>Create New Exam Configuration</h2>
+        </div>
+      </header>
+
+      <div class="admin-body">
+        
+        <form id="createExamForm" class="card" style="max-width:900px; padding:2rem;">
+          
+          <h3 style="margin-bottom:1.5rem; padding-bottom:0.75rem; border-bottom:1px solid var(--border-light);">
+            <i class="fa-solid fa-sliders" style="color:var(--primary);"></i> Exam Details & Parameters
+          </h3>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Exam Title</label>
+              <input type="text" id="examTitleInput" class="form-control" placeholder="e.g. JavaScript Advanced Exam" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Subject / Category</label>
+              <input type="text" id="examSubjectInput" class="form-control" placeholder="e.g. Web Development" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Description / Instructions Summary</label>
+            <textarea id="examDescInput" class="form-control" rows="2" placeholder="Brief description for candidates..." required></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Duration (Minutes)</label>
+              <input type="number" id="examDurationInput" class="form-control" value="20" min="5" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Passing Percentage (%)</label>
+              <input type="number" id="examPassingPctInput" class="form-control" value="60" min="1" max="100" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Calculated Total Marks</label>
+              <input type="number" id="createTotalMarksInput" class="form-control" value="0" readonly style="background:var(--bg-subtle);">
+            </div>
+          </div>
+
+          <div class="form-group" style="display:flex; align-items:center; gap:0.75rem; margin:1rem 0;">
+            <input type="checkbox" id="examRandomizeToggle" checked style="width:20px; height:20px; accent-color:var(--primary);">
+            <label for="examRandomizeToggle" style="font-weight:600; cursor:pointer;">Randomize Question Order when test starts</label>
+          </div>
+
+          <!-- Question Selection Directory -->
+          <h3 style="margin:2rem 0 1rem 0; padding-bottom:0.75rem; border-bottom:1px solid var(--border-light);">
+            <i class="fa-solid fa-check-double" style="color:var(--primary);"></i> Select Questions (<span id="createTotalQCount">0</span> Selected)
+          </h3>
+
+          <div id="questionSelectContainer" style="max-height:300px; overflow-y:auto; border:1px solid var(--border-light); padding:1rem; border-radius:var(--radius-md); background:var(--bg-subtle);">
+            <!-- Populated dynamically by admin.js -->
+          </div>
+
+          <div style="margin-top:2rem; text-align:right;">
+            <button type="submit" class="btn btn-primary btn-lg"><i class="fa-solid fa-floppy-disk"></i> Save & Publish Exam</button>
+          </div>
+
+        </form>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -378,35 +378,50 @@ const SEED_EXAMS = [
   }
 ];
 
-// Default Seed Users
+// Default Seed Users (CodeTantra Style with Roll No, Profile Photo, Department)
 const SEED_USERS = [
   {
     id: 'usr_admin',
-    name: 'ExamPro Administrator',
+    studentId: 'ADM-9001',
+    rollNo: 'ADM-9001',
+    name: 'Dr. Robert Vance',
     email: 'admin@exampro.com',
     phone: '+1 555 019 2831',
     password: 'admin123',
     role: 'admin',
+    department: 'Exam Controller Branch',
+    batch: 'Faculty / Staff',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
     active: true,
     registeredAt: '2026-01-10'
   },
   {
     id: 'usr_john',
+    studentId: '21BCS0142',
+    rollNo: '21BCS0142',
     name: 'John Doe',
     email: 'john@example.com',
     phone: '+1 555 014 9920',
     password: 'student123',
     role: 'student',
+    department: 'Computer Science & Eng (CSE)',
+    batch: '2021-2025',
+    avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
     active: true,
     registeredAt: '2026-02-01'
   },
   {
     id: 'usr_sarah',
+    studentId: '22ECE0089',
+    rollNo: '22ECE0089',
     name: 'Sarah Jenkins',
     email: 'sarah@example.com',
     phone: '+1 555 018 7741',
     password: 'student123',
     role: 'student',
+    department: 'Electronics & Comm (ECE)',
+    batch: '2022-2026',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
     active: true,
     registeredAt: '2026-02-15'
   }
@@ -417,8 +432,10 @@ const SEED_RESULTS = [
   {
     id: 'res_sample_1',
     studentId: 'usr_john',
+    studentRollNo: '21BCS0142',
     studentName: 'John Doe',
     studentEmail: 'john@example.com',
+    studentAvatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
     examId: 'exam_web_dev',
     examTitle: 'Web Development Fundamentals',
     totalQuestions: 5,
@@ -444,8 +461,31 @@ const SEED_RESULTS = [
 // Storage Engine
 const ExamProDB = {
   init() {
-    if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
+    let users = localStorage.getItem(STORAGE_KEYS.USERS);
+    if (!users) {
       localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(SEED_USERS));
+    } else {
+      // Upgrade existing users if missing studentId / avatar
+      const existing = JSON.parse(users);
+      let updated = false;
+      existing.forEach(u => {
+        if (!u.studentId) {
+          u.studentId = u.rollNo || (u.role === 'admin' ? 'ADM-9001' : '21BCS0142');
+          u.rollNo = u.studentId;
+          updated = true;
+        }
+        if (!u.avatar) {
+          u.avatar = u.email.includes('john') ? 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80' : 
+                     (u.email.includes('sarah') ? 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80' : 
+                     'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80');
+          updated = true;
+        }
+        if (!u.department) {
+          u.department = u.role === 'admin' ? 'Exam Controller Branch' : 'Computer Science & Eng (CSE)';
+          updated = true;
+        }
+      });
+      if (updated) localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(existing));
     }
     if (!localStorage.getItem(STORAGE_KEYS.EXAMS)) {
       localStorage.setItem(STORAGE_KEYS.EXAMS, JSON.stringify(SEED_EXAMS));
@@ -580,24 +620,44 @@ function showModal({ title, bodyHtml, confirmText = 'Confirm', cancelText = 'Can
   });
 }
 
-// Nav Header Update Helper
+// Nav Header Update Helper with Profile Photo & ID Number
+function getUserAvatarHTML(user, extraClasses = '') {
+  if (!user) return `<div class="avatar-circle default ${extraClasses}">?</div>`;
+  const initial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
+  if (user.avatar && user.avatar.startsWith('http')) {
+    return `<div class="avatar-wrapper ${extraClasses}">
+      <img src="${user.avatar}" alt="${user.name}" class="user-avatar-img" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0D8ABC&color=fff';">
+      <span class="status-dot-online"></span>
+    </div>`;
+  }
+  return `<div class="avatar-circle ${extraClasses}" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight:700;">
+    ${initial}
+    <span class="status-dot-online"></span>
+  </div>`;
+}
+
 function renderUserHeader() {
   const user = getCurrentUser();
   const userBadgeContainer = document.getElementById('userNavBadge');
   if (!userBadgeContainer) return;
 
   if (user) {
+    const studentIdBadge = user.studentId || user.rollNo || (user.role === 'admin' ? 'ADM-9001' : '21BCS0142');
+    const avatarHtml = getUserAvatarHTML(user, 'nav-avatar');
     userBadgeContainer.innerHTML = `
-      <div class="user-badge">
-        <div class="user-avatar">${user.name.charAt(0).toUpperCase()}</div>
-        <span class="user-name" style="font-weight:600; font-size:0.9rem;">${user.name}</span>
+      <div class="user-badge" style="display:flex; align-items:center; gap:0.75rem; background:var(--bg-surface); padding:0.35rem 0.75rem; border-radius:var(--radius-full); border:1px solid var(--border-light); shadow:var(--shadow-sm);">
+        ${avatarHtml}
+        <div style="display:flex; flex-direction:column; line-height:1.2;">
+          <span class="user-name" style="font-weight:700; font-size:0.88rem; color:var(--text-primary);">${user.name}</span>
+          <span style="font-size:0.72rem; color:var(--primary); font-weight:600; letter-spacing:0.5px;">ID: ${studentIdBadge}</span>
+        </div>
       </div>
-      <button onclick="logoutUser()" class="btn btn-sm btn-outline"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+      <button onclick="logoutUser()" class="btn btn-sm btn-outline" style="border-radius:var(--radius-full);"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
     `;
   } else {
     userBadgeContainer.innerHTML = `
-      <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
-      <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+      <a href="login.html" class="btn btn-secondary btn-sm" style="border-radius:var(--radius-full);"><i class="fa-solid fa-user-lock"></i> Student Portal</a>
+      <a href="admin-login.html" class="btn btn-primary btn-sm" style="border-radius:var(--radius-full);"><i class="fa-solid fa-shield-halved"></i> Faculty Login</a>
     `;
   }
 }

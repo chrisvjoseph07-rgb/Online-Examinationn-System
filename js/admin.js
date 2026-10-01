@@ -484,12 +484,23 @@ function renderStudentList() {
     }
 
     filtered.forEach((u, idx) => {
+      const rollNo = u.studentId || u.rollNo || '21BCS0142';
+      const avatarSrc = u.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=2563eb&color=fff`;
+      const dept = u.department || 'CSE';
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${idx + 1}</td>
-        <td><strong>${escapeHtml(u.name)}</strong></td>
+        <td>
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <img src="${avatarSrc}" alt="${escapeHtml(u.name)}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid #bfdbfe;">
+            <div>
+              <strong>${escapeHtml(u.name)}</strong>
+              <div style="font-size:0.72rem; color:var(--primary); font-weight:700;">Roll No: ${escapeHtml(rollNo)}</div>
+            </div>
+          </div>
+        </td>
         <td>${escapeHtml(u.email)}</td>
-        <td>${u.phone || 'N/A'}</td>
+        <td><span class="badge badge-secondary" style="font-size:0.75rem;">${escapeHtml(dept)}</span></td>
         <td>
           <span class="badge ${u.active ? 'badge-success' : 'badge-danger'}">
             ${u.active ? 'Active' : 'Inactive'}

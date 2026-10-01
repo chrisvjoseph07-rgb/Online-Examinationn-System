@@ -3,67 +3,214 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Login | ExamPro</title>
+  <title>Candidate Examination Login | CodeTantra Automated Testing Portal</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body class="auth-page">
+<body class="codetantra-login-page">
 
-  <div class="auth-card">
-    <div class="auth-header">
-      <a href="index.html" class="brand-logo">
-        <i class="fa-solid fa-graduation-cap"></i>
-        <span>Exam<span style="color:var(--primary);">Pro</span></span>
-      </a>
-      <h2 class="auth-title">Welcome Back</h2>
-      <p class="auth-subtitle">Log in to your account to take exams & view results</p>
-    </div>
-
-    <!-- Demo Credentials Hint -->
-    <div class="security-note" style="margin-bottom: 1.5rem;">
-      <i class="fa-solid fa-circle-info"></i>
-      <div>
-        <strong>Demo Login Credentials:</strong><br>
-        Email: <code>john@example.com</code> | Password: <code>student123</code>
+  <!-- Top Institutional Header -->
+  <header class="codetantra-header">
+    <div class="header-container">
+      <div class="institution-brand">
+        <a href="index.html" class="brand-link">
+          <div class="brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div class="brand-text">
+            <span class="main-title">CodeTantra ExamPro Suite</span>
+            <span class="sub-title">National Academic Testing & AI Proctoring Platform</span>
+          </div>
+        </a>
+      </div>
+      <div class="header-status">
+        <span class="live-status-pill"><i class="fa-solid fa-signal"></i> Portal Status: <strong>Online</strong></span>
+        <span class="time-pill"><i class="fa-regular fa-clock"></i> <span id="portalClock">14:35:00 IST</span></span>
       </div>
     </div>
+  </header>
 
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="email" class="form-label">Email Address</label>
-        <div style="position:relative;">
-          <input type="email" id="email" class="form-control" placeholder="name@example.com" required>
+  <!-- Main Login Grid -->
+  <main class="codetantra-main">
+    <div class="login-wrapper">
+      
+      <!-- Left Column: System Compatibility & Announcements -->
+      <section class="codetantra-info-panel">
+        <div class="info-card">
+          <div class="card-badge"><i class="fa-solid fa-microchip"></i> System Diagnostics</div>
+          <h3>Candidate Compatibility Check</h3>
+          <p class="section-desc">Ensure your browser and environment meet secure proctoring standards before authenticating.</p>
+          
+          <div class="diagnostics-grid">
+            <div class="diag-item status-ok">
+              <i class="fa-solid fa-globe"></i>
+              <div>
+                <strong>Browser Engine</strong>
+                <span>HTML5 / ES6 Web API Supported</span>
+              </div>
+              <span class="check-icon"><i class="fa-solid fa-circle-check"></i></span>
+            </div>
+            
+            <div class="diag-item status-ok">
+              <i class="fa-solid fa-camera-retro"></i>
+              <div>
+                <strong>Webcam Detector</strong>
+                <span>Video Proctoring Feed Ready</span>
+              </div>
+              <span class="check-icon"><i class="fa-solid fa-circle-check"></i></span>
+            </div>
+
+            <div class="diag-item status-ok">
+              <i class="fa-solid fa-wifi"></i>
+              <div>
+                <strong>Network Latency</strong>
+                <span>Ping: 18ms (Optimal)</span>
+              </div>
+              <span class="check-icon"><i class="fa-solid fa-circle-check"></i></span>
+            </div>
+
+            <div class="diag-item status-ok">
+              <i class="fa-solid fa-shield-halved"></i>
+              <div>
+                <strong>Security Protocol</strong>
+                <span>Tab-Switch & Copy Protection</span>
+              </div>
+              <span class="check-icon"><i class="fa-solid fa-circle-check"></i></span>
+            </div>
+          </div>
+
+          <div class="notice-box">
+            <div class="notice-title"><i class="fa-solid fa-bullhorn"></i> Important Exam Instructions</div>
+            <ul>
+              <li>Login using your <strong>Student Roll No / ID Number</strong> (e.g., <code>21BCS0142</code>).</li>
+              <li>Keep your original Institutional ID card ready for camera verification.</li>
+              <li>Unsaved browser tabs will be flagged by automated security protocols.</li>
+            </ul>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="form-group">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-          <label for="password" class="form-label" style="margin:0;">Password</label>
-          <a href="#" onclick="showToast('Password reset link sent to demo email.', 'info'); return false;" style="font-size:0.8rem;">Forgot Password?</a>
+      <!-- Right Column: Realistic Candidate Login Portal -->
+      <section class="codetantra-form-panel">
+        <div class="auth-box">
+          
+          <div class="auth-box-header">
+            <div class="portal-badge"><i class="fa-solid fa-user-lock"></i> Candidate Login</div>
+            <h2>Student Portal Access</h2>
+            <p>Enter your institutional Roll Number and credentials to proceed.</p>
+          </div>
+
+          <!-- Live Candidate Profile Photo & ID Card Card -->
+          <div id="liveCandidateCard" class="candidate-card-wrapper">
+            <div class="candidate-preview-box empty-state">
+              <div class="preview-avatar-placeholder"><i class="fa-solid fa-user-graduate"></i></div>
+              <div class="preview-info">
+                <span class="preview-title">Institutional Identity Check</span>
+                <span class="preview-subtitle">Enter Student Roll No or Email to view photo</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Demo Account Chips -->
+          <div class="quick-demo-section">
+            <span class="demo-label"><i class="fa-solid fa-bolt"></i> Quick Select Demo Profile:</span>
+            <div class="demo-chips">
+              <button type="button" class="demo-chip" onclick="fillDemoAccount('john@example.com', 'student123', '21BCS0142')">
+                <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&auto=format&fit=crop&q=80" alt="John Doe">
+                <div>
+                  <strong>John Doe</strong>
+                  <span>Roll No: 21BCS0142 (CSE)</span>
+                </div>
+              </button>
+
+              <button type="button" class="demo-chip" onclick="fillDemoAccount('sarah@example.com', 'student123', '22ECE0089')">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Sarah">
+                <div>
+                  <strong>Sarah Jenkins</strong>
+                  <span>Roll No: 22ECE0089 (ECE)</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <form id="loginForm">
+            <!-- Student ID / Roll No Input -->
+            <div class="form-group">
+              <label for="loginIdentifier" class="form-label">
+                <i class="fa-solid fa-id-card"></i> Student ID Number / Roll No / Email
+              </label>
+              <div class="input-with-icon">
+                <i class="fa-solid fa-user input-icon"></i>
+                <input type="text" id="loginIdentifier" class="form-control" placeholder="e.g. 21BCS0142 or john@example.com" autocomplete="off" required>
+              </div>
+            </div>
+
+            <!-- Password Input with Toggle -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="password" class="form-label"><i class="fa-solid fa-key"></i> Password</label>
+                <a href="#" onclick="showToast('Contact administrator to reset institutional password.', 'info'); return false;" class="forgot-link">Forgot Password?</a>
+              </div>
+              <div class="input-with-icon">
+                <i class="fa-solid fa-lock input-icon"></i>
+                <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                <button type="button" id="togglePasswordBtn" class="password-toggle-btn"><i class="fa-solid fa-eye"></i></button>
+              </div>
+            </div>
+
+            <!-- Security Captcha Pin -->
+            <div class="form-group captcha-group">
+              <label class="form-label"><i class="fa-solid fa-shield-cat"></i> Security Captcha PIN</label>
+              <div class="captcha-row">
+                <div class="captcha-box">
+                  <span id="captchaDisplay" class="captcha-text">8B49</span>
+                  <button type="button" id="refreshCaptchaBtn" class="captcha-refresh" title="Refresh Captcha"><i class="fa-solid fa-arrows-rotate"></i></button>
+                </div>
+                <input type="text" id="captchaInput" class="form-control captcha-input" placeholder="Enter PIN" maxlength="4" required>
+              </div>
+            </div>
+
+            <div class="form-group checkbox-row">
+              <input type="checkbox" id="rememberMe" checked>
+              <label for="rememberMe">Remember candidate session on this device</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full btn-lg login-submit-btn">
+              <i class="fa-solid fa-right-to-bracket"></i> Verify Candidate & Enter Portal
+            </button>
+          </form>
+
+          <div class="auth-footer-links">
+            <p>New Student Candidate? <a href="register.html">Register Account</a></p>
+            <p class="admin-portal-link">Are you an Examiner? <a href="admin-login.html"><i class="fa-solid fa-shield"></i> Faculty / Admin Portal</a></p>
+          </div>
+
         </div>
-        <input type="password" id="password" class="form-control" placeholder="••••••••" required>
-      </div>
+      </section>
 
-      <div class="form-group" style="display:flex; align-items:center; gap:0.5rem;">
-        <input type="checkbox" id="rememberMe" style="accent-color:var(--primary);">
-        <label for="rememberMe" style="font-size:0.85rem; color:var(--text-secondary); cursor:pointer;">Remember me on this device</label>
-      </div>
-
-      <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:0.5rem;">
-        <i class="fa-solid fa-right-to-bracket"></i> Login to Dashboard
-      </button>
-    </form>
-
-    <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color:var(--text-secondary);">
-      Don't have an account? <a href="register.html" style="font-weight:600;">Register Now</a>
     </div>
+  </main>
 
-    <div style="text-align:center; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border-light); font-size:0.85rem;">
-      Are you an Administrator? <a href="admin-login.html" style="font-weight:600; color:var(--primary-dark);">Admin Login Portal</a>
+  <footer class="codetantra-footer">
+    <div class="footer-container">
+      <span>&copy; 2026 CodeTantra ExamPro Systems. All rights reserved. Powered by HTML5 & Secure LocalStorage.</span>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">System Manual</a>
+      </div>
     </div>
-  </div>
+  </footer>
 
   <script src="js/app.js"></script>
   <script src="js/auth.js"></script>
+  <script>
+    // Live clock update
+    setInterval(() => {
+      const clockEl = document.getElementById('portalClock');
+      if (clockEl) {
+        const now = new Date();
+        clockEl.textContent = now.toLocaleTimeString() + ' IST';
+      }
+    }, 1000);
+  </script>
 </body>
 </html>

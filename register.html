@@ -3,71 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Registration | ExamPro</title>
+  <title>Candidate Enrollment & Registration | CodeTantra ExamPro</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body class="auth-page">
+<body class="codetantra-login-page">
 
-  <div class="auth-card" style="max-width:540px;">
-    <div class="auth-header">
-      <a href="index.html" class="brand-logo">
-        <i class="fa-solid fa-graduation-cap"></i>
-        <span>Exam<span style="color:var(--primary);">Pro</span></span>
-      </a>
-      <h2 class="auth-title">Create an Account</h2>
-      <p class="auth-subtitle">Register to take online exams and access performance reports</p>
+  <header class="codetantra-header">
+    <div class="header-container">
+      <div class="institution-brand">
+        <a href="index.html" class="brand-link">
+          <div class="brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div class="brand-text">
+            <span class="main-title">CodeTantra ExamPro Suite</span>
+            <span class="sub-title">Student Candidate Enrollment & Registration</span>
+          </div>
+        </a>
+      </div>
+      <div class="header-status">
+        <span class="live-status-pill"><i class="fa-solid fa-user-plus"></i> Candidate Portal Registration</span>
+      </div>
     </div>
+  </header>
 
-    <form id="registerForm">
-      <div class="form-group">
-        <label for="fullName" class="form-label">Full Name</label>
-        <input type="text" id="fullName" class="form-control" placeholder="John Doe" required>
-      </div>
+  <main class="codetantra-main">
+    <div class="login-wrapper single-col" style="max-width: 680px;">
+      <section class="codetantra-form-panel">
+        <div class="auth-box">
+          
+          <div class="auth-box-header">
+            <div class="portal-badge"><i class="fa-solid fa-id-card"></i> Student ID Registration</div>
+            <h2>Register New Candidate Account</h2>
+            <p>Fill in your academic details to receive your official Roll Number and Exam Portal access.</p>
+          </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="email" class="form-label">Email Address</label>
-          <input type="email" id="email" class="form-control" placeholder="john@example.com" required>
+          <form id="registerForm">
+            <!-- Full Name & Roll No row -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fullName" class="form-label"><i class="fa-solid fa-user"></i> Full Legal Name</label>
+                <input type="text" id="fullName" class="form-control" placeholder="e.g. Alex Rivera" required>
+              </div>
+
+              <div class="form-group">
+                <label for="rollNo" class="form-label"><i class="fa-solid fa-id-badge"></i> Assigned Student Roll No / ID</label>
+                <input type="text" id="rollNo" class="form-control" value="23BCS8492" required>
+                <span class="field-hint">Format: YY-DEPT-XXXX (Auto-generated or edit)</span>
+              </div>
+            </div>
+
+            <!-- Email & Phone row -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email" class="form-label"><i class="fa-solid fa-envelope"></i> Email Address</label>
+                <input type="email" id="email" class="form-control" placeholder="alex@university.edu" required>
+              </div>
+
+              <div class="form-group">
+                <label for="phone" class="form-label"><i class="fa-solid fa-phone"></i> Mobile Phone</label>
+                <input type="tel" id="phone" class="form-control" placeholder="+1 555 019 2831" required>
+              </div>
+            </div>
+
+            <!-- Department & Profile Photo Selection -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="department" class="form-label"><i class="fa-solid fa-graduation-cap"></i> Department / Branch</label>
+                <select id="department" class="form-control">
+                  <option value="Computer Science & Eng (CSE)">Computer Science & Eng (CSE)</option>
+                  <option value="Electronics & Comm (ECE)">Electronics & Comm (ECE)</option>
+                  <option value="Information Technology (IT)">Information Technology (IT)</option>
+                  <option value="Data Science & AI (DSAI)">Data Science & AI (DSAI)</option>
+                  <option value="Mechanical Eng (ME)">Mechanical Eng (ME)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="avatarUrl" class="form-label"><i class="fa-solid fa-image"></i> Candidate Profile Photo URL</label>
+                <input type="url" id="avatarUrl" class="form-control" placeholder="https://images.unsplash.com/photo-..." value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80">
+                <span class="field-hint">Paste candidate profile photo link</span>
+              </div>
+            </div>
+
+            <!-- Preset Avatar Quick Picker -->
+            <div class="form-group">
+              <label class="form-label"><i class="fa-solid fa-circle-user"></i> Or Pick Sample Profile Avatar Photo:</label>
+              <div class="avatar-picker-grid">
+                <button type="button" class="avatar-pick-btn" onclick="setAvatar('https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80')">
+                  <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&auto=format&fit=crop&q=80" alt="Avatar 1">
+                </button>
+                <button type="button" class="avatar-pick-btn" onclick="setAvatar('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80')">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Avatar 2">
+                </button>
+                <button type="button" class="avatar-pick-btn" onclick="setAvatar('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80')">
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Avatar 3">
+                </button>
+                <button type="button" class="avatar-pick-btn" onclick="setAvatar('https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80')">
+                  <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80" alt="Avatar 4">
+                </button>
+              </div>
+            </div>
+
+            <!-- Passwords -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="password" class="form-label"><i class="fa-solid fa-key"></i> Create Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Min 6 characters" required>
+              </div>
+
+              <div class="form-group">
+                <label for="confirmPassword" class="form-label"><i class="fa-solid fa-lock"></i> Confirm Password</label>
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat password" required>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full btn-lg login-submit-btn">
+              <i class="fa-solid fa-address-card"></i> Create Student ID & Enter Portal
+            </button>
+          </form>
+
+          <div class="auth-footer-links">
+            <p>Already have an account? <a href="login.html">Log In Here</a></p>
+          </div>
+
         </div>
-
-        <div class="form-group">
-          <label for="phone" class="form-label">Phone Number</label>
-          <input type="tel" id="phone" class="form-control" placeholder="+1 555 019 2831" required>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" id="password" class="form-control" placeholder="Min 6 characters" required>
-        </div>
-
-        <div class="form-group">
-          <label for="confirmPassword" class="form-label">Confirm Password</label>
-          <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat password" required>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="role" class="form-label">I am registering as a:</label>
-        <select id="role" class="form-control">
-          <option value="student">Student</option>
-          <option value="applicant">Job Applicant / Candidate</option>
-        </select>
-      </div>
-
-      <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:0.5rem;">
-        <i class="fa-solid fa-user-check"></i> Register Account
-      </button>
-    </form>
-
-    <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color:var(--text-secondary);">
-      Already have an account? <a href="login.html" style="font-weight:600;">Log In</a>
+      </section>
     </div>
-  </div>
+  </main>
 
   <script src="js/app.js"></script>
   <script src="js/auth.js"></script>
+  <script>
+    function setAvatar(url) {
+      document.getElementById('avatarUrl').value = url;
+      showToast('Profile photo avatar selected!', 'info');
+    }
+    // Generate random roll no on load
+    document.addEventListener('DOMContentLoaded', () => {
+      const randomRoll = '23BCS' + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('rollNo').value = randomRoll;
+    });
+  </script>
 </body>
 </html>

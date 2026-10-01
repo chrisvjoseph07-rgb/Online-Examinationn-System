@@ -31,19 +31,11 @@
     </div>
   </header>
 
-  <!-- Welcome Dashboard Header -->
-  <div class="dashboard-header">
+  <!-- Candidate Profile Dashboard Header -->
+  <div class="dashboard-header codetantra-dash-header">
     <div class="container">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
-        <div>
-          <h1 id="welcomeUserGreeting">Welcome Back!</h1>
-          <p>Select an exam below to begin testing your skills and view your progress.</p>
-        </div>
-        <div>
-          <span class="badge badge-info" style="font-size:0.85rem; padding:0.5rem 1rem;">
-            <i class="fa-solid fa-user-graduate"></i> Student Portal Active
-          </span>
-        </div>
+      <div class="student-profile-banner" id="studentProfileBanner">
+        <!-- Rendered dynamically via JS with photo & ID -->
       </div>
     </div>
   </div>
@@ -51,6 +43,9 @@
   <main class="main-content">
     <div class="container">
       
+      <!-- Active Exam In Progress Banner -->
+      <div id="activeExamBannerContainer"></div>
+
       <!-- Metrics Summary Cards -->
       <div class="stats-grid">
         <div class="stat-card">
@@ -147,20 +142,53 @@
   </footer>
 
   <script src="js/app.js"></script>
+  <script src="js/exam.js"></script>
   <script>
+    let dashTimerInterval = null;
+
     document.addEventListener('DOMContentLoaded', () => {
       const user = requireAuth(['student', 'applicant']);
       if (!user) return;
 
-      document.getElementById('welcomeUserGreeting').innerText = `Welcome back, ${user.name}!`;
+      const rollNo = user.studentId || user.rollNo || '21BCS0142';
+      const dept = user.department || 'Computer Science & Eng (CSE)';
+      const avatarSrc = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=fff`;
+
+      const bannerEl = document.getElementById('studentProfileBanner');
+      if (bannerEl) {
+        bannerEl.innerHTML = `
+          <div class="dash-candidate-card">
+            <div class="dash-avatar-wrapper">
+              <img src="${avatarSrc}" alt="${user.name}" class="dash-avatar-img" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=fff';">
+              <span class="proctor-active-dot" title="Webcam Proctoring Active"></span>
+            </div>
+            <div class="dash-candidate-details">
+              <div class="candidate-header-line">
+                <h2>Welcome Back, ${escapeHtml(user.name)}!</h2>
+                <span class="badge badge-success"><i class="fa-solid fa-shield-check"></i> Proctored & Verified</span>
+              </div>
+              <div class="candidate-sub-line">
+                <span class="info-pill"><i class="fa-solid fa-id-card"></i> <strong>Roll No:</strong> ${escapeHtml(rollNo)}</span>
+                <span class="info-pill"><i class="fa-solid fa-graduation-cap"></i> ${escapeHtml(dept)}</span>
+                <span class="info-pill"><i class="fa-solid fa-calendar"></i> Batch: ${escapeHtml(user.batch || '2021-2025')}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
 
       renderStudentDashboard();
     });
 
     function renderStudentDashboard() {
       const user = getCurrentUser();
+      if (!user) return;
+
       const exams = ExamProDB.get(STORAGE_KEYS.EXAMS).filter(e => e.active);
       const results = ExamProDB.get(STORAGE_KEYS.RESULTS).filter(r => r.studentId === user.id);
+
+      // Render Active Exam Banner & Live Countdown
+      renderActiveExamBanner(user);
 
       // Metrics calculation
       const totalAttempted = results.length;
@@ -180,6 +208,7 @@
       const grid = document.getElementById('studentExamGrid');
 
       const filterExams = () => {
+        const activeState = getActiveExamState(user.id);
         const term = searchInput.value.toLowerCase();
         const subj = subjectSelect.value;
 
@@ -197,28 +226,39 @@
         }
 
         filtered.forEach(ex => {
+          const isExamActive = activeState && activeState.examId === ex.id;
+          const timeLeftDisplay = isExamActive
+            ? `<div class="exam-meta-item" style="color:var(--danger); font-weight:700;"><i class="fa-solid fa-stopwatch"></i> ${formatTimeLeft(activeState.timeRemainingSeconds)} Left</div>`
+            : `<div class="exam-meta-item"><i class="fa-regular fa-clock"></i> ${ex.durationMinutes} Mins</div>`;
+
           const card = document.createElement('div');
-          card.className = 'exam-card';
+          card.className = `exam-card ${isExamActive ? 'active-exam-card' : ''}`;
           card.innerHTML = `
             <div class="exam-card-body">
-              <span class="badge badge-primary">${escapeHtml(ex.subject)}</span>
-              <h3 style="margin: 0.75rem 0 0.5rem 0;">${escapeHtml(ex.title)}</h3>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                <span class="badge badge-primary">${escapeHtml(ex.subject)}</span>
+                ${isExamActive ? '<span class="badge badge-warning" style="animation: pulse 1.5s infinite;"><i class="fa-solid fa-clock"></i> In Progress</span>' : ''}
+              </div>
+              <h3 style="margin: 0.5rem 0;">${escapeHtml(ex.title)}</h3>
               <p style="font-size:0.85rem; height:40px; overflow:hidden;">${escapeHtml(ex.description)}</p>
               <div class="exam-meta-grid">
-                <div class="exam-meta-item"><i class="fa-regular fa-clock"></i> ${ex.durationMinutes} Mins</div>
+                ${timeLeftDisplay}
                 <div class="exam-meta-item"><i class="fa-solid fa-list-check"></i> ${ex.questionIds.length} Questions</div>
                 <div class="exam-meta-item"><i class="fa-solid fa-star"></i> ${ex.totalMarks} Marks</div>
                 <div class="exam-meta-item"><i class="fa-solid fa-percent"></i> ${ex.passingPercentage}% Pass</div>
               </div>
-              <a href="instructions.html?id=${ex.id}" class="btn btn-primary btn-full"><i class="fa-solid fa-play"></i> Start Exam</a>
+              ${isExamActive 
+                ? `<a href="exam.html?id=${ex.id}" class="btn btn-warning btn-full" style="font-weight:700;"><i class="fa-solid fa-circle-play"></i> Resume Exam</a>`
+                : `<a href="instructions.html?id=${ex.id}" class="btn btn-primary btn-full"><i class="fa-solid fa-play"></i> Start Exam</a>`
+              }
             </div>
           `;
           grid.appendChild(card);
         });
       };
 
-      searchInput.addEventListener('input', filterExams);
-      subjectSelect.addEventListener('change', filterExams);
+      searchInput.oninput = filterExams;
+      subjectSelect.onchange = filterExams;
       filterExams();
 
       // Render Results Table
@@ -247,6 +287,82 @@
           resultsBody.appendChild(row);
         });
       }
+    }
+
+    function renderActiveExamBanner(user) {
+      if (dashTimerInterval) clearInterval(dashTimerInterval);
+      const container = document.getElementById('activeExamBannerContainer');
+      if (!container) return;
+
+      const activeState = getActiveExamState(user.id);
+      if (!activeState) {
+        container.innerHTML = '';
+        return;
+      }
+
+      const exams = ExamProDB.get(STORAGE_KEYS.EXAMS);
+      const activeExam = exams.find(e => e.id === activeState.examId);
+      const examTitle = activeExam ? activeExam.title : 'Active Exam';
+
+      const updateBannerUI = () => {
+        const currentState = getActiveExamState(user.id);
+        if (!currentState || currentState.timeRemainingSeconds <= 0) {
+          if (currentState) {
+            showToast('Exam time expired! Auto-submitting exam...', 'warning');
+            autoSubmitActiveExamState(currentState);
+          }
+          clearInterval(dashTimerInterval);
+          container.innerHTML = '';
+          renderStudentDashboard();
+          return;
+        }
+
+        const answeredCount = Object.keys(currentState.userAnswers || {}).filter(k => currentState.userAnswers[k] !== '' && currentState.userAnswers[k] !== undefined).length;
+        const totalQuestions = (currentState.questions || []).length;
+        const timeLeftStr = formatTimeLeft(currentState.timeRemainingSeconds);
+        const isWarning = currentState.timeRemainingSeconds <= 300;
+
+        container.innerHTML = `
+          <div class="card" style="margin-bottom:2rem; border-left:5px solid var(--primary); background:linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); padding:1.5rem; box-shadow:var(--shadow-md);">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.25rem;">
+              <div>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem;">
+                  <span class="badge badge-warning" style="animation: pulse 1.5s infinite;"><i class="fa-solid fa-spinner fa-spin"></i> EXAM IN PROGRESS</span>
+                  <span class="badge badge-primary">${escapeHtml(activeExam ? activeExam.subject : 'Active')}</span>
+                </div>
+                <h2 style="margin:0; font-size:1.4rem;">${escapeHtml(examTitle)}</h2>
+                <p style="margin-top:0.35rem; color:var(--text-secondary); font-size:0.9rem;">
+                  Questions Answered: <strong>${answeredCount} / ${totalQuestions}</strong>
+                </p>
+              </div>
+              
+              <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;">
+                <div style="text-align:right; min-width:140px;">
+                  <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Time Remaining</div>
+                  <div style="font-size:1.8rem; font-weight:800; font-family:monospace; color:${isWarning ? 'var(--danger)' : 'var(--primary)'}; display:flex; align-items:center; gap:0.4rem; justify-content:flex-end;">
+                    <i class="fa-solid fa-stopwatch ${isWarning ? 'fa-beat' : ''}"></i> ${timeLeftStr}
+                  </div>
+                </div>
+                
+                <a href="exam.html?id=${activeState.examId}" class="btn btn-primary btn-lg" style="box-shadow:var(--shadow-md); font-weight:700; padding:0.75rem 1.5rem;">
+                  <i class="fa-solid fa-circle-play"></i> Resume Exam
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // Update time left displays on any active exam meta items in available grid
+        const activeMetaItems = document.querySelectorAll('.active-exam-card .fa-stopwatch');
+        activeMetaItems.forEach(icon => {
+          if (icon.parentElement) {
+            icon.parentElement.innerHTML = `<i class="fa-solid fa-stopwatch"></i> ${timeLeftStr} Left`;
+          }
+        });
+      };
+
+      updateBannerUI();
+      dashTimerInterval = setInterval(updateBannerUI, 1000);
     }
 
     function escapeHtml(text) {

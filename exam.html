@@ -10,22 +10,25 @@
 <body class="exam-layout">
 
   <!-- Sticky Topbar Header -->
-  <header class="exam-header">
+  <header class="exam-header codetantra-exam-header">
     <div style="display:flex; align-items:center; gap:1rem;">
       <a href="student-dashboard.html" class="brand-logo" style="color:white; font-size:1.25rem;">
-        <i class="fa-solid fa-graduation-cap"></i> ExamPro
+        <i class="fa-solid fa-graduation-cap"></i> ExamPro <span style="font-size:0.7rem; color:var(--accent); font-weight:700;">PROCTOR</span>
       </a>
-      <span style="color:#94a3b8;">|</span>
+      <span style="color:#475569;">|</span>
       <h4 id="examTitleDisplay" style="color:white; font-size:1rem; margin:0; font-weight:600;">Loading Exam...</h4>
     </div>
 
-    <div style="display:flex; align-items:center; gap:1.5rem;">
+    <!-- Candidate Proctor Profile Badge in Exam Header -->
+    <div id="examCandidateHeaderBadge" class="exam-candidate-badge"></div>
+
+    <div style="display:flex; align-items:center; gap:1.25rem;">
       <div class="timer-box" id="timerBox">
         <i class="fa-regular fa-clock"></i>
         <span id="timerDisplay">00:00</span>
       </div>
 
-      <button id="submitExamBtn" class="btn btn-danger btn-sm">
+      <button id="submitExamBtn" class="btn btn-danger btn-sm" style="border-radius:var(--radius-full); font-weight:700;">
         <i class="fa-solid fa-paper-plane"></i> Submit Exam
       </button>
     </div>

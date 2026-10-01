@@ -3,51 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Portal Login | ExamPro</title>
+  <title>Faculty & Administrator Portal | CodeTantra ExamPro</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body class="auth-page">
+<body class="codetantra-login-page admin-theme">
 
-  <div class="auth-card">
-    <div class="auth-header">
-      <a href="index.html" class="brand-logo">
-        <i class="fa-solid fa-user-shield" style="color:var(--primary);"></i>
-        <span>Exam<span style="color:var(--primary);">Pro</span> Admin</span>
-      </a>
-      <h2 class="auth-title">Administrator Portal</h2>
-      <p class="auth-subtitle">Sign in to manage exams, question banks, and student scores</p>
-    </div>
-
-    <!-- Demo Credentials Notice -->
-    <div class="security-note" style="margin-bottom: 1.5rem; background:var(--primary-light); border-color:var(--primary-border); color:var(--primary-dark);">
-      <i class="fa-solid fa-key"></i>
-      <div>
-        <strong>Default Admin Credentials:</strong><br>
-        Email: <code>admin@exampro.com</code> | Password: <code>admin123</code>
+  <!-- Top Institutional Header -->
+  <header class="codetantra-header">
+    <div class="header-container">
+      <div class="institution-brand">
+        <a href="index.html" class="brand-link">
+          <div class="brand-icon admin-icon"><i class="fa-solid fa-user-shield"></i></div>
+          <div class="brand-text">
+            <span class="main-title">CodeTantra ExamPro Suite</span>
+            <span class="sub-title">Faculty Control & Controller of Examinations Portal</span>
+          </div>
+        </a>
+      </div>
+      <div class="header-status">
+        <span class="live-status-pill admin-pill"><i class="fa-solid fa-lock"></i> Secure Faculty Domain</span>
       </div>
     </div>
+  </header>
 
-    <form id="adminLoginForm">
-      <div class="form-group">
-        <label for="adminEmail" class="form-label">Administrator Email</label>
-        <input type="email" id="adminEmail" class="form-control" value="admin@exampro.com" required>
-      </div>
+  <main class="codetantra-main">
+    <div class="login-wrapper single-col">
+      <section class="codetantra-form-panel admin-panel">
+        <div class="auth-box">
+          
+          <div class="auth-box-header">
+            <div class="portal-badge admin-badge"><i class="fa-solid fa-shield-halved"></i> Faculty & Examiner Access</div>
+            <h2>Exam Controller Portal</h2>
+            <p>Sign in to configure exams, update question banks, and audit candidate results.</p>
+          </div>
 
-      <div class="form-group">
-        <label for="adminPassword" class="form-label">Password</label>
-        <input type="password" id="adminPassword" class="form-control" value="admin123" required>
-      </div>
+          <!-- Live Faculty Profile Card -->
+          <div id="liveCandidateCard" class="candidate-card-wrapper">
+            <div class="candidate-preview-box active-matched admin-matched">
+              <div class="preview-avatar-wrap">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Dr. Robert Vance" class="preview-avatar-img">
+                <span class="verified-badge admin-badge"><i class="fa-solid fa-shield"></i></span>
+              </div>
+              <div class="preview-info">
+                <div class="preview-name-row">
+                  <strong class="preview-name">Dr. Robert Vance</strong>
+                  <span class="role-pill admin">ADMINISTRATOR</span>
+                </div>
+                <div class="preview-meta">
+                  <span class="meta-item"><i class="fa-solid fa-id-card"></i> <strong>Staff ID:</strong> ADM-9001</span>
+                  <span class="meta-item"><i class="fa-solid fa-building"></i> Exam Controller Branch</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-      <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:0.5rem;">
-        <i class="fa-solid fa-lock-open"></i> Login to Admin Panel
-      </button>
-    </form>
+          <!-- Quick Demo Admin Fill -->
+          <div class="quick-demo-section">
+            <span class="demo-label"><i class="fa-solid fa-bolt"></i> Quick Select Admin Credentials:</span>
+            <div class="demo-chips">
+              <button type="button" class="demo-chip admin-chip" onclick="fillDemoAccount('admin@exampro.com', 'admin123', 'ADM-9001')">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Admin">
+                <div>
+                  <strong>Dr. Robert Vance</strong>
+                  <span>ID: ADM-9001 (Exam Controller)</span>
+                </div>
+              </button>
+            </div>
+          </div>
 
-    <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem;">
-      <a href="login.html"><i class="fa-solid fa-arrow-left"></i> Switch to Student Login</a>
+          <form id="adminLoginForm">
+            <div class="form-group">
+              <label for="adminEmail" class="form-label"><i class="fa-solid fa-envelope"></i> Faculty ID / Email</label>
+              <div class="input-with-icon">
+                <i class="fa-solid fa-user-tie input-icon"></i>
+                <input type="text" id="adminEmail" class="form-control" value="admin@exampro.com" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="adminPassword" class="form-label"><i class="fa-solid fa-key"></i> Passcode</label>
+              <div class="input-with-icon">
+                <i class="fa-solid fa-lock input-icon"></i>
+                <input type="password" id="adminPassword" class="form-control" value="admin123" required>
+                <button type="button" id="togglePasswordBtn" class="password-toggle-btn"><i class="fa-solid fa-eye"></i></button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full btn-lg login-submit-btn admin-btn">
+              <i class="fa-solid fa-shield-cat"></i> Verify Faculty Identity & Launch Admin Dashboard
+            </button>
+          </form>
+
+          <div class="auth-footer-links">
+            <a href="login.html"><i class="fa-solid fa-arrow-left"></i> Switch to Candidate Student Login Portal</a>
+          </div>
+
+        </div>
+      </section>
     </div>
-  </div>
+  </main>
 
   <script src="js/app.js"></script>
   <script src="js/auth.js"></script>

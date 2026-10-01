@@ -58,39 +58,84 @@ function initInstructionsPage(examId) {
     return;
   }
 
+  const activeState = getActiveExamState(user.id);
+  const isCurrentExamActive = activeState && activeState.examId === examId && activeState.timeRemainingSeconds > 0;
+
   const examQuestions = questions.filter(q => exam.questionIds.includes(q.id));
   const passingMarks = Math.round((exam.passingPercentage / 100) * exam.totalMarks);
 
   document.getElementById('instExamTitle').innerText = exam.title;
   document.getElementById('instSubject').innerText = exam.subject;
-  document.getElementById('instDuration').innerText = `${exam.durationMinutes} Minutes`;
+  document.getElementById('instDuration').innerText = isCurrentExamActive 
+    ? `${formatTimeLeft(activeState.timeRemainingSeconds)} Left`
+    : `${exam.durationMinutes} Minutes`;
   document.getElementById('instQuestionCount').innerText = examQuestions.length;
   document.getElementById('instTotalMarks').innerText = exam.totalMarks;
   document.getElementById('instPassingMarks').innerText = `${passingMarks} (${exam.passingPercentage}%)`;
   document.getElementById('instDescription').innerText = exam.description;
 
-  const startBtn = document.getElementById('startExamBtn');
-  startBtn.addEventListener('click', () => {
-    showModal({
-      title: 'Confirm Exam Start',
-      bodyHtml: `
-        <div style="text-align:center;">
-          <i class="fa-solid fa-triangle-exclamation" style="font-size:3rem; color:var(--warning); margin-bottom:1rem;"></i>
-          <p><strong>Are you ready to begin the exam?</strong></p>
-          <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.5rem;">
-            Once started, the timer will countdown automatically. Do not switch tabs or close the browser window.
-          </p>
+  // Render Candidate Verification Box
+  const verifyBox = document.getElementById('candidateVerificationBox');
+  if (verifyBox) {
+    const rollNo = user.studentId || user.rollNo || '21BCS0142';
+    const dept = user.department || 'Computer Science & Eng (CSE)';
+    const avatarSrc = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=fff`;
+
+    verifyBox.innerHTML = `
+      <div class="candidate-verification-card">
+        <div class="verify-avatar">
+          <img src="${avatarSrc}" alt="${user.name}">
+          <span class="cam-status-pill"><i class="fa-solid fa-video"></i> Camera Active</span>
         </div>
-      `,
-      confirmText: 'Start Now',
-      cancelText: 'Cancel',
-      onConfirm: () => {
-        // Clear any previous cached draft for clean start if new
-        localStorage.removeItem(STORAGE_KEYS.ACTIVE_EXAM_STATE);
-        window.location.href = `exam.html?id=${exam.id}`;
-      }
+        <div class="verify-details">
+          <div class="verify-header">
+            <h4><i class="fa-solid fa-id-card-clip"></i> Verified Candidate Details</h4>
+            <span class="status-badge-ok"><i class="fa-solid fa-circle-check"></i> CodeTantra Identity Lock</span>
+          </div>
+          <div class="verify-grid">
+            <div><strong>Candidate Name:</strong> ${user.name}</div>
+            <div><strong>Student Roll No:</strong> <span class="roll-badge">${rollNo}</span></div>
+            <div><strong>Department:</strong> ${dept}</div>
+            <div><strong>System Check:</strong> Secure Web Browser Verified</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  const startBtn = document.getElementById('startExamBtn');
+
+  if (isCurrentExamActive) {
+    startBtn.className = 'btn btn-warning btn-lg';
+    startBtn.style.minWidth = '240px';
+    startBtn.innerHTML = `<i class="fa-solid fa-circle-play"></i> Resume Exam (${formatTimeLeft(activeState.timeRemainingSeconds)} Left)`;
+    
+    startBtn.addEventListener('click', () => {
+      window.location.href = `exam.html?id=${exam.id}`;
     });
-  });
+  } else {
+    startBtn.addEventListener('click', () => {
+      showModal({
+        title: 'Confirm Exam Start',
+        bodyHtml: `
+          <div style="text-align:center;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size:3rem; color:var(--warning); margin-bottom:1rem;"></i>
+            <p><strong>Are you ready to begin the exam?</strong></p>
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.5rem;">
+              Once started, the timer will countdown automatically. Do not switch tabs or close the browser window.
+            </p>
+          </div>
+        `,
+        confirmText: 'Start Now',
+        cancelText: 'Cancel',
+        onConfirm: () => {
+          // Clear any previous cached draft for clean start if starting new
+          localStorage.removeItem(STORAGE_KEYS.ACTIVE_EXAM_STATE);
+          window.location.href = `exam.html?id=${exam.id}`;
+        }
+      });
+    });
+  }
 }
 
 /* ==========================================
@@ -112,19 +157,41 @@ function initLiveExam(examId) {
 
   activeExamData = exam;
 
+  // Render Proctor Topbar Candidate Badge
+  const candidateBadgeEl = document.getElementById('examCandidateHeaderBadge');
+  if (candidateBadgeEl) {
+    const rollNo = user.studentId || user.rollNo || '21BCS0142';
+    const avatarSrc = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=fff`;
+    candidateBadgeEl.innerHTML = `
+      <div class="exam-proctor-card">
+        <img src="${avatarSrc}" alt="${user.name}" class="proctor-thumb">
+        <div class="proctor-info">
+          <span class="p-name">${user.name}</span>
+          <span class="p-roll">ID: ${rollNo}</span>
+        </div>
+        <span class="live-rec-dot" title="Live Video Proctoring Active"><i class="fa-solid fa-circle"></i> LIVE</span>
+      </div>
+    `;
+  }
+
   // Retrieve draft state if user accidentally refreshed page
-  const savedState = localStorage.getItem(STORAGE_KEYS.ACTIVE_EXAM_STATE);
-  if (savedState) {
-    const state = JSON.parse(savedState);
-    if (state.examId === examId && state.userId === user.id) {
-      activeQuestions = state.questions;
-      userAnswers = state.userAnswers || {};
-      markedForReview = state.markedForReview || {};
-      currentQuestionIndex = state.currentQuestionIndex || 0;
-      timeRemainingSeconds = state.timeRemainingSeconds;
-      tabSwitchCount = state.tabSwitchCount || 0;
-      showToast('Restored previous exam attempt state.', 'info');
+  const activeState = getActiveExamState(user.id);
+  if (activeState && activeState.examId === examId) {
+    if (activeState.timeRemainingSeconds <= 0) {
+      showToast('Exam time expired! Auto-submitting now...', 'warning');
+      const res = autoSubmitActiveExamState(activeState);
+      setTimeout(() => {
+        window.location.href = res ? `result.html?resId=${res.id}` : 'student-dashboard.html';
+      }, 1500);
+      return;
     }
+    activeQuestions = activeState.questions;
+    userAnswers = activeState.userAnswers || {};
+    markedForReview = activeState.markedForReview || {};
+    currentQuestionIndex = activeState.currentQuestionIndex || 0;
+    timeRemainingSeconds = activeState.timeRemainingSeconds;
+    tabSwitchCount = activeState.tabSwitchCount || 0;
+    showToast('Restored previous exam attempt state.', 'info');
   }
 
   if (!activeQuestions || activeQuestions.length === 0) {
@@ -225,10 +292,102 @@ function saveActiveExamState() {
     markedForReview: markedForReview,
     currentQuestionIndex: currentQuestionIndex,
     timeRemainingSeconds: timeRemainingSeconds,
-    tabSwitchCount: tabSwitchCount
+    tabSwitchCount: tabSwitchCount,
+    lastSavedTimestamp: Date.now()
   };
 
   localStorage.setItem(STORAGE_KEYS.ACTIVE_EXAM_STATE, JSON.stringify(state));
+}
+
+function getActiveExamState(userId) {
+  const savedState = localStorage.getItem(STORAGE_KEYS.ACTIVE_EXAM_STATE);
+  if (!savedState) return null;
+
+  try {
+    const state = JSON.parse(savedState);
+    if (!userId || state.userId === userId) {
+      if (state.lastSavedTimestamp) {
+        const elapsed = Math.floor((Date.now() - state.lastSavedTimestamp) / 1000);
+        state.timeRemainingSeconds = Math.max(0, state.timeRemainingSeconds - elapsed);
+      }
+      return state;
+    }
+  } catch (e) {
+    console.error('Error parsing active exam state:', e);
+  }
+  return null;
+}
+
+function autoSubmitActiveExamState(state) {
+  if (!state) return null;
+  const exams = ExamProDB.get(STORAGE_KEYS.EXAMS);
+  const exam = exams.find(e => e.id === state.examId);
+  if (!exam) {
+    localStorage.removeItem(STORAGE_KEYS.ACTIVE_EXAM_STATE);
+    return null;
+  }
+
+  let totalScore = 0;
+  let correctCount = 0;
+  let wrongCount = 0;
+  let attemptedCount = 0;
+
+  const questions = state.questions || [];
+  const userAnswers = state.userAnswers || {};
+
+  questions.forEach(q => {
+    const userAns = userAnswers[q.id];
+    if (userAns !== undefined && userAns !== '') {
+      attemptedCount++;
+      const isCorrect = String(userAns).trim().toLowerCase() === String(q.correctAnswer).trim().toLowerCase();
+      if (isCorrect) {
+        correctCount++;
+        totalScore += q.marks;
+      } else {
+        wrongCount++;
+      }
+    }
+  });
+
+  const unansweredCount = questions.length - attemptedCount;
+  const totalPossible = questions.reduce((acc, q) => acc + q.marks, 0);
+  const percentage = totalPossible > 0 ? Math.round((totalScore / totalPossible) * 100) : 0;
+  const passed = percentage >= exam.passingPercentage;
+
+  const resultObj = {
+    id: 'res_' + Date.now(),
+    studentId: state.userId,
+    studentName: getCurrentUser()?.name || 'Student',
+    studentEmail: getCurrentUser()?.email || '',
+    examId: exam.id,
+    examTitle: exam.title,
+    totalQuestions: questions.length,
+    attemptedQuestions: attemptedCount,
+    correctAnswers: correctCount,
+    wrongAnswers: wrongCount,
+    unansweredQuestions: unansweredCount,
+    score: totalScore,
+    totalPossibleMarks: totalPossible,
+    percentage: percentage,
+    passed: passed,
+    tabSwitchViolations: state.tabSwitchCount || 0,
+    completedAt: new Date().toISOString(),
+    userAnswers: userAnswers,
+    examSnapshotQuestions: questions
+  };
+
+  const results = ExamProDB.get(STORAGE_KEYS.RESULTS);
+  results.push(resultObj);
+  ExamProDB.set(STORAGE_KEYS.RESULTS, results);
+  localStorage.removeItem(STORAGE_KEYS.ACTIVE_EXAM_STATE);
+  return resultObj;
+}
+
+function formatTimeLeft(totalSeconds) {
+  if (totalSeconds <= 0) return '00:00';
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
 // Render Question Engine

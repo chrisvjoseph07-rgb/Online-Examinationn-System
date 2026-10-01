@@ -247,6 +247,15 @@
                 <div class="exam-meta-item"><i class="fa-solid fa-star"></i> ${ex.totalMarks} Marks</div>
                 <div class="exam-meta-item"><i class="fa-solid fa-percent"></i> ${ex.passingPercentage}% Pass</div>
               </div>
+              <div class="candidate-avatar-stack-container">
+                <div class="candidate-avatar-stack">
+                  <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=80&auto=format&fit=crop&q=80" alt="John Doe" title="John Doe (21BCS0142) taking test">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&auto=format&fit=crop&q=80" alt="Sarah" title="Sarah Jenkins (22ECE0089) taking test">
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80" alt="Alex" title="Alex Rivera (23BCS8492) taking test">
+                  <span class="avatar-count-badge">+14</span>
+                </div>
+                <span class="active-students-label"><i class="fa-solid fa-circle blink-green"></i> 17 Candidates Enrolled</span>
+              </div>
               ${isExamActive 
                 ? `<a href="exam.html?id=${ex.id}" class="btn btn-warning btn-full" style="font-weight:700;"><i class="fa-solid fa-circle-play"></i> Resume Exam</a>`
                 : `<a href="instructions.html?id=${ex.id}" class="btn btn-primary btn-full"><i class="fa-solid fa-play"></i> Start Exam</a>`

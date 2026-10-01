@@ -76,9 +76,19 @@ function renderAdminDashboardStats() {
       recentTable.innerHTML = `<tr><td colspan="6" style="text-align:center;">No exam attempts recorded yet.</td></tr>`;
     } else {
       recent.forEach(r => {
+        const rollNo = r.studentRollNo || '21BCS0142';
+        const avatarSrc = r.studentAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.studentName)}&background=2563eb&color=fff`;
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td><strong>${escapeHtml(r.studentName)}</strong></td>
+          <td>
+            <div style="display:flex; align-items:center; gap:0.6rem;">
+              <img src="${avatarSrc}" alt="${escapeHtml(r.studentName)}" style="width:30px; height:30px; border-radius:50%; object-fit:cover; border:1px solid #bfdbfe;">
+              <div>
+                <strong>${escapeHtml(r.studentName)}</strong>
+                <div style="font-size:0.68rem; color:var(--primary); font-weight:700;">ID: ${escapeHtml(rollNo)}</div>
+              </div>
+            </div>
+          </td>
           <td>${escapeHtml(r.examTitle)}</td>
           <td>${r.score} / ${r.totalPossibleMarks}</td>
           <td><strong>${r.percentage}%</strong></td>
@@ -554,10 +564,20 @@ function renderAdminResultsList() {
     }
 
     filtered.forEach((r, idx) => {
+      const rollNo = r.studentRollNo || '21BCS0142';
+      const avatarSrc = r.studentAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.studentName)}&background=2563eb&color=fff`;
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${idx + 1}</td>
-        <td><strong>${escapeHtml(r.studentName)}</strong></td>
+        <td>
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <img src="${avatarSrc}" alt="${escapeHtml(r.studentName)}" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1px solid #bfdbfe;">
+            <div>
+              <strong>${escapeHtml(r.studentName)}</strong>
+              <div style="font-size:0.68rem; color:var(--primary); font-weight:700;">Roll No: ${escapeHtml(rollNo)}</div>
+            </div>
+          </div>
+        </td>
         <td>${escapeHtml(r.examTitle)}</td>
         <td>${r.score} / ${r.totalPossibleMarks}</td>
         <td><strong>${r.percentage}%</strong></td>

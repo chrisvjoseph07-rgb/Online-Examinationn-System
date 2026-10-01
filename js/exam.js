@@ -174,6 +174,46 @@ function initLiveExam(examId) {
     `;
   }
 
+  // Render Live Proctor Camera Feed Box in Exam Sidebar
+  const camFeedEl = document.getElementById('liveProctorCamFeed');
+  if (camFeedEl) {
+    const rollNo = user.studentId || user.rollNo || '21BCS0142';
+    const dept = user.department || 'Computer Science & Eng';
+    const avatarSrc = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=fff`;
+
+    camFeedEl.innerHTML = `
+      <div class="proctor-cam-card">
+        <div class="cam-header">
+          <span class="rec-status"><i class="fa-solid fa-circle blink-red"></i> LIVE PROCTOR FEED</span>
+          <span class="fps-pill">1080p 30fps</span>
+        </div>
+        <div class="cam-viewport">
+          <img src="${avatarSrc}" alt="${user.name}" class="cam-student-img">
+          <div class="face-target-box">
+            <span class="corner tl"></span>
+            <span class="corner tr"></span>
+            <span class="corner bl"></span>
+            <span class="corner br"></span>
+            <div class="scan-laser-line"></div>
+          </div>
+          <div class="cam-overlay-info">
+            <span class="candidate-roll">Roll No: ${rollNo}</span>
+          </div>
+        </div>
+        <div class="cam-footer">
+          <div class="student-meta-line">
+            <strong class="s-name">${user.name}</strong>
+            <span class="s-dept">${dept}</span>
+          </div>
+          <div class="proctor-checklist">
+            <span class="check-tag ok"><i class="fa-solid fa-face-smile"></i> Face Locked</span>
+            <span class="check-tag ok"><i class="fa-solid fa-shield"></i> Security OK</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   // Retrieve draft state if user accidentally refreshed page
   const activeState = getActiveExamState(user.id);
   if (activeState && activeState.examId === examId) {
@@ -631,6 +671,28 @@ function renderResultPage(resultId) {
 
   document.getElementById('resStudentName').innerText = res.studentName;
   document.getElementById('resExamTitle').innerText = res.examTitle;
+
+  // Render Candidate Student Profile Banner on Scorecard
+  const resCandidateCard = document.getElementById('resultCandidateCard');
+  if (resCandidateCard) {
+    const rollNo = res.studentRollNo || user.studentId || user.rollNo || '21BCS0142';
+    const avatarSrc = res.studentAvatar || user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(res.studentName)}&background=2563eb&color=fff`;
+    resCandidateCard.innerHTML = `
+      <div class="result-candidate-identity-card">
+        <img src="${avatarSrc}" alt="${res.studentName}" class="res-avatar-img">
+        <div class="res-identity-details">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <strong class="res-candidate-name">${res.studentName}</strong>
+            <span class="badge badge-primary" style="font-size:0.7rem;">Verified Candidate</span>
+          </div>
+          <div class="res-meta-line">
+            <span><i class="fa-solid fa-id-card"></i> <strong>Roll No:</strong> ${rollNo}</span>
+            <span><i class="fa-solid fa-calendar-check"></i> <strong>Completed:</strong> ${new Date(res.completedAt || Date.now()).toLocaleDateString()}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
   const badgeCircle = document.getElementById('resBadgeCircle');
   badgeCircle.className = `result-badge-circle ${res.passed ? 'pass' : 'fail'}`;

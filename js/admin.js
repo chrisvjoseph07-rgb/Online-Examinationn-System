@@ -45,7 +45,42 @@ document.addEventListener('DOMContentLoaded', () => {
   if (adminResultsBody) {
     renderAdminResultsList();
   }
+
+  // Render Admin Topbar User Badge
+  renderAdminHeader();
 });
+
+function renderAdminHeader() {
+  const user = getCurrentUser();
+  if (!user || user.role !== 'admin') return;
+
+  const topbarBadges = document.querySelectorAll('.admin-topbar');
+  topbarBadges.forEach(topbar => {
+    let actionContainer = topbar.querySelector('.admin-nav-actions');
+    if (!actionContainer) {
+      actionContainer = document.createElement('div');
+      actionContainer.className = 'admin-nav-actions';
+      actionContainer.style.display = 'flex';
+      actionContainer.style.alignItems = 'center';
+      actionContainer.style.gap = '0.85rem';
+      topbar.appendChild(actionContainer);
+    }
+
+    const staffId = user.studentId || user.rollNo || 'ADM-9001';
+    const avatarSrc = user.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80';
+
+    actionContainer.innerHTML = `
+      <div class="user-badge" style="display:flex; align-items:center; gap:0.65rem; background:white; padding:0.3rem 0.75rem; border-radius:var(--radius-full); border:1px solid var(--border-light); box-shadow:var(--shadow-sm);">
+        <img src="${avatarSrc}" alt="${user.name}" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:2px solid #7c3aed; cursor:pointer;" onclick="openChangePhotoModal(() => renderAdminHeader())" title="Click to Change Admin Photo">
+        <div style="display:flex; flex-direction:column; line-height:1.2;">
+          <strong style="font-size:0.85rem; color:#0f172a;">${escapeHtml(user.name)}</strong>
+          <span style="font-size:0.68rem; color:#7c3aed; font-weight:700;">ID: ${escapeHtml(staffId)}</span>
+        </div>
+      </div>
+      <button onclick="openChangePhotoModal(() => renderAdminHeader())" class="btn btn-sm btn-secondary" style="border-radius:var(--radius-full);" title="Change Admin Photo"><i class="fa-solid fa-camera"></i> Photo</button>
+    `;
+  });
+}
 
 /* ==========================================
    1. ADMIN DASHBOARD STATS

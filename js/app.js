@@ -521,6 +521,151 @@ function setCurrentUser(user) {
   localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(user));
 }
 
+function updateUserProfilePhoto(newAvatarUrl, callback) {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  user.avatar = newAvatarUrl;
+  setCurrentUser(user);
+
+  // Update in users storage list
+  const users = ExamProDB.get(STORAGE_KEYS.USERS);
+  const foundIdx = users.findIndex(u => u.id === user.id);
+  if (foundIdx !== -1) {
+    users[foundIdx].avatar = newAvatarUrl;
+    ExamProDB.set(STORAGE_KEYS.USERS, users);
+  }
+
+  // Update in results storage list for past attempts
+  const results = ExamProDB.get(STORAGE_KEYS.RESULTS);
+  let resUpdated = false;
+  results.forEach(r => {
+    if (r.studentId === user.id) {
+      r.studentAvatar = newAvatarUrl;
+      resUpdated = true;
+    }
+  });
+  if (resUpdated) ExamProDB.set(STORAGE_KEYS.RESULTS, results);
+
+  renderUserHeader();
+  showToast('Profile photo updated successfully!', 'success');
+  if (callback) callback(newAvatarUrl);
+}
+
+function openChangePhotoModal(onSuccessCallback) {
+  const user = getCurrentUser();
+  if (!user) {
+    showToast('Please log in to change your photo.', 'warning');
+    return;
+  }
+
+  const currentAvatar = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=fff`;
+
+  showModal({
+    title: 'Update Profile Photo',
+    bodyHtml: `
+      <div class="change-photo-modal-body" style="text-align:center;">
+        <div style="margin-bottom:1.25rem;">
+          <div style="position:relative; width:90px; height:90px; margin:0 auto;">
+            <img id="modalPhotoPreview" src="${currentAvatar}" alt="Preview" style="width:100%; height:100%; border-radius:50%; object-fit:cover; border:3px solid var(--primary); box-shadow:var(--shadow-md);">
+          </div>
+          <span style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-top:0.35rem;">Current Photo Preview</span>
+        </div>
+
+        <div style="text-align:left; display:flex; flex-direction:column; gap:1rem;">
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" style="font-size:0.85rem;"><i class="fa-solid fa-upload"></i> Upload Image File from Computer:</label>
+            <input type="file" id="modalPhotoFileInput" class="form-control" accept="image/*">
+          </div>
+
+          <div style="text-align:center; font-weight:700; font-size:0.75rem; color:var(--text-muted); position:relative;">
+            <span style="background:white; padding:0 0.5rem; position:relative; z-index:1;">OR PASTE IMAGE URL</span>
+            <div style="position:absolute; top:50%; left:0; right:0; height:1px; background:var(--border-light);"></div>
+          </div>
+
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" style="font-size:0.85rem;"><i class="fa-solid fa-link"></i> Web Image URL Link:</label>
+            <input type="url" id="modalPhotoUrlInput" class="form-control" placeholder="https://example.com/my-photo.jpg">
+          </div>
+
+          <div style="text-align:center; font-weight:700; font-size:0.75rem; color:var(--text-muted); position:relative;">
+            <span style="background:white; padding:0 0.5rem; position:relative; z-index:1;">OR PICK SAMPLE AVATAR</span>
+            <div style="position:absolute; top:50%; left:0; right:0; height:1px; background:var(--border-light);"></div>
+          </div>
+
+          <div class="avatar-picker-grid" style="justify-content:center;">
+            <button type="button" class="avatar-pick-btn modal-pick-preset" data-url="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80">
+              <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&auto=format&fit=crop&q=80" alt="Avatar 1">
+            </button>
+            <button type="button" class="avatar-pick-btn modal-pick-preset" data-url="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Avatar 2">
+            </button>
+            <button type="button" class="avatar-pick-btn modal-pick-preset" data-url="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Avatar 3">
+            </button>
+            <button type="button" class="avatar-pick-btn modal-pick-preset" data-url="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar 4">
+            </button>
+          </div>
+        </div>
+      </div>
+    `,
+    confirmText: 'Save New Photo',
+    cancelText: 'Cancel',
+    onConfirm: () => {
+      const fileInput = document.getElementById('modalPhotoFileInput');
+      const urlInput = document.getElementById('modalPhotoUrlInput');
+      const previewImg = document.getElementById('modalPhotoPreview');
+
+      let chosenAvatar = previewImg ? previewImg.src : null;
+
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          updateUserProfilePhoto(e.target.result, onSuccessCallback);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else if (urlInput && urlInput.value.trim()) {
+        updateUserProfilePhoto(urlInput.value.trim(), onSuccessCallback);
+      } else if (chosenAvatar) {
+        updateUserProfilePhoto(chosenAvatar, onSuccessCallback);
+      }
+    }
+  });
+
+  // Attach modal listeners after rendering
+  setTimeout(() => {
+    const fileInput = document.getElementById('modalPhotoFileInput');
+    const urlInput = document.getElementById('modalPhotoUrlInput');
+    const previewImg = document.getElementById('modalPhotoPreview');
+
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          const r = new FileReader();
+          r.onload = (ev) => { if (previewImg) previewImg.src = ev.target.result; };
+          r.readAsDataURL(e.target.files[0]);
+        }
+      });
+    }
+
+    if (urlInput) {
+      urlInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        if (val && previewImg) previewImg.src = val;
+      });
+    }
+
+    document.querySelectorAll('.modal-pick-preset').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const url = btn.getAttribute('data-url');
+        if (url && previewImg) previewImg.src = url;
+        if (urlInput) urlInput.value = url;
+      });
+    });
+  }, 100);
+}
+
 function logoutUser() {
   localStorage.removeItem(STORAGE_KEYS.SESSION);
   window.location.href = 'login.html';
@@ -646,12 +791,15 @@ function renderUserHeader() {
     const avatarHtml = getUserAvatarHTML(user, 'nav-avatar');
     userBadgeContainer.innerHTML = `
       <div class="user-badge" style="display:flex; align-items:center; gap:0.75rem; background:var(--bg-surface); padding:0.35rem 0.75rem; border-radius:var(--radius-full); border:1px solid var(--border-light); shadow:var(--shadow-sm);">
-        ${avatarHtml}
+        <div onclick="openChangePhotoModal()" style="cursor:pointer;" title="Click to Change Profile Photo">
+          ${avatarHtml}
+        </div>
         <div style="display:flex; flex-direction:column; line-height:1.2;">
           <span class="user-name" style="font-weight:700; font-size:0.88rem; color:var(--text-primary);">${user.name}</span>
           <span style="font-size:0.72rem; color:var(--primary); font-weight:600; letter-spacing:0.5px;">ID: ${studentIdBadge}</span>
         </div>
       </div>
+      <button onclick="openChangePhotoModal()" class="btn btn-sm btn-secondary" style="border-radius:var(--radius-full);" title="Change Profile Photo"><i class="fa-solid fa-camera"></i> Photo</button>
       <button onclick="logoutUser()" class="btn btn-sm btn-outline" style="border-radius:var(--radius-full);"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
     `;
   } else {

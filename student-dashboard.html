@@ -158,14 +158,16 @@
       if (bannerEl) {
         bannerEl.innerHTML = `
           <div class="dash-candidate-card">
-            <div class="dash-avatar-wrapper">
+            <div class="dash-avatar-wrapper" onclick="openChangePhotoModal(() => window.location.reload())" style="cursor:pointer;" title="Click to Upload / Change Photo">
               <img src="${avatarSrc}" alt="${user.name}" class="dash-avatar-img" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=fff';">
+              <span class="avatar-edit-overlay"><i class="fa-solid fa-camera"></i></span>
               <span class="proctor-active-dot" title="Webcam Proctoring Active"></span>
             </div>
             <div class="dash-candidate-details">
               <div class="candidate-header-line">
                 <h2>Welcome Back, ${escapeHtml(user.name)}!</h2>
                 <span class="badge badge-success"><i class="fa-solid fa-shield-check"></i> Proctored & Verified</span>
+                <button onclick="openChangePhotoModal(() => window.location.reload())" class="btn btn-sm btn-outline" style="color:white; border-color:rgba(255,255,255,0.3); margin-left:auto;"><i class="fa-solid fa-camera"></i> Change Photo</button>
               </div>
               <div class="candidate-sub-line">
                 <span class="info-pill"><i class="fa-solid fa-id-card"></i> <strong>Roll No:</strong> ${escapeHtml(rollNo)}</span>

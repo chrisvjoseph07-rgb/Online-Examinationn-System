@@ -2,25 +2,11 @@
 
 A modern, responsive, client-side web application for conducting secure online exams, managing question banks, automated scoring, and detailed performance reporting.
 
-## 🚀 Live Demo & Web Links
+## 🚀 Web Links
 
 - **🌐 Live Web Application:** [https://chrisvjoseph07-rgb.github.io/Online-Examinationn-System/](https://chrisvjoseph07-rgb.github.io/Online-Examinationn-System/)
 - **📁 GitHub Source Repository:** [https://github.com/chrisvjoseph07-rgb/Online-Examinationn-System](https://github.com/chrisvjoseph07-rgb/Online-Examinationn-System)
 - **💻 Local Web Server (when running):** [http://localhost:8000](http://localhost:8000)
-
----
-
-## 🔑 Demo Login Credentials
-
-### Student / Candidate Portal
-- **Login Link:** [http://localhost:8000/login.html](http://localhost:8000/login.html)
-- **Email:** `john@example.com`
-- **Password:** `student123`
-
-### Administrator Portal
-- **Login Link:** [http://localhost:8000/admin-login.html](http://localhost:8000/admin-login.html)
-- **Email:** `admin@exampro.com`
-- **Password:** `admin123`
 
 ---
 

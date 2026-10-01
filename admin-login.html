@@ -40,35 +40,12 @@
 
           <!-- Live Faculty Profile Card -->
           <div id="liveCandidateCard" class="candidate-card-wrapper">
-            <div class="candidate-preview-box active-matched admin-matched">
-              <div class="preview-avatar-wrap">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Dr. Robert Vance" class="preview-avatar-img">
-                <span class="verified-badge admin-badge"><i class="fa-solid fa-shield"></i></span>
-              </div>
+            <div class="candidate-preview-box empty-state">
+              <div class="preview-avatar-placeholder"><i class="fa-solid fa-user-shield"></i></div>
               <div class="preview-info">
-                <div class="preview-name-row">
-                  <strong class="preview-name">Dr. Robert Vance</strong>
-                  <span class="role-pill admin">ADMINISTRATOR</span>
-                </div>
-                <div class="preview-meta">
-                  <span class="meta-item"><i class="fa-solid fa-id-card"></i> <strong>Staff ID:</strong> ADM-9001</span>
-                  <span class="meta-item"><i class="fa-solid fa-building"></i> Exam Controller Branch</span>
-                </div>
+                <span class="preview-title">Faculty Identity Check</span>
+                <span class="preview-subtitle">Enter Staff ID (e.g. ADM-9001) or Email to view photo</span>
               </div>
-            </div>
-          </div>
-
-          <!-- Quick Demo Admin Fill -->
-          <div class="quick-demo-section">
-            <span class="demo-label"><i class="fa-solid fa-bolt"></i> Quick Select Admin Credentials:</span>
-            <div class="demo-chips">
-              <button type="button" class="demo-chip admin-chip" onclick="fillDemoAccount('admin@exampro.com', 'admin123', 'ADM-9001')">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Admin">
-                <div>
-                  <strong>Dr. Robert Vance</strong>
-                  <span>ID: ADM-9001 (Exam Controller)</span>
-                </div>
-              </button>
             </div>
           </div>
 
@@ -77,7 +54,7 @@
               <label for="adminEmail" class="form-label"><i class="fa-solid fa-envelope"></i> Faculty ID / Email</label>
               <div class="input-with-icon">
                 <i class="fa-solid fa-user-tie input-icon"></i>
-                <input type="text" id="adminEmail" class="form-control" value="admin@exampro.com" required>
+                <input type="text" id="adminEmail" class="form-control" placeholder="e.g. ADM-9001 or admin@exampro.com" required>
               </div>
             </div>
 
@@ -85,7 +62,7 @@
               <label for="adminPassword" class="form-label"><i class="fa-solid fa-key"></i> Passcode</label>
               <div class="input-with-icon">
                 <i class="fa-solid fa-lock input-icon"></i>
-                <input type="password" id="adminPassword" class="form-control" value="admin123" required>
+                <input type="password" id="adminPassword" class="form-control" placeholder="••••••••" required>
                 <button type="button" id="togglePasswordBtn" class="password-toggle-btn"><i class="fa-solid fa-eye"></i></button>
               </div>
             </div>
